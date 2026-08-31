@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { Adaptation } from "@/lib/types";
 
@@ -116,10 +117,11 @@ export default async function Home({
         {!error && adaptations && adaptations.length > 0 && (
           <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {adaptations.map((adaptation: Adaptation) => (
-              <li
-                key={adaptation.id}
-                className="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
-              >
+              <li key={adaptation.id}>
+                <Link
+                  href={`/adaptations/${adaptation.id}`}
+                  className="block rounded-xl border border-zinc-200 bg-white p-5 shadow-sm transition-colors hover:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-600"
+                >
                 <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
                   {adaptation.title}
                 </h2>
@@ -167,6 +169,7 @@ export default async function Home({
                   {differenceCounts.get(adaptation.id) ?? 0} difference
                   {differenceCounts.get(adaptation.id) === 1 ? "" : "s"} logged
                 </p>
+                </Link>
               </li>
             ))}
           </ul>
