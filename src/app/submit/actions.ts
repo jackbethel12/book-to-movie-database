@@ -33,9 +33,15 @@ export async function submitDifference(
   }
 
   const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   // status is always forced to "pending" here — it only becomes visible on
   // the site once approved through the moderation queue (a later step).
+  // submitted_by is only set when someone is logged in; anonymous
+  // submissions are still allowed, they just won't count toward anyone's
+  // submission total.
   const { error } = await supabase.from("difference_entries").insert({
     adaptation_id: adaptationId,
     category,
@@ -43,6 +49,7 @@ export async function submitDifference(
     detail: typeof detail === "string" && detail.trim() ? detail.trim() : null,
     spoiler_flag: spoilerFlag,
     status: "pending",
+    submitted_by: user?.id ?? null,
   });
 
   if (error) {
