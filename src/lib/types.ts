@@ -2,15 +2,18 @@
 // supabase/migrations/0001_init.sql. Keeping them in one place means every
 // page that talks to Supabase agrees on what a row looks like.
 
-export type DifferenceCategory =
-  | "Plot"
-  | "Ending"
-  | "Character"
-  | "Setting"
-  | "Theme/Tone"
-  | "Timeline"
-  | "Omitted Content"
-  | "Added Content";
+export const DIFFERENCE_CATEGORIES = [
+  "Plot",
+  "Ending",
+  "Character",
+  "Setting",
+  "Theme/Tone",
+  "Timeline",
+  "Omitted Content",
+  "Added Content",
+] as const;
+
+export type DifferenceCategory = (typeof DIFFERENCE_CATEGORIES)[number];
 
 export type DifferenceStatus = "pending" | "approved" | "rejected";
 

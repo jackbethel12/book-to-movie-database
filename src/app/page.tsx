@@ -61,14 +61,22 @@ export default async function Home({
   return (
     <div className="min-h-full bg-zinc-50 dark:bg-black">
       <div className="mx-auto max-w-5xl px-6 py-12">
-        <header className="mb-10">
-          <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-            Book vs. Movie
-          </h1>
-          <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-            A crowdsourced reference for what changed between the book and the
-            movie.
-          </p>
+        <header className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+              Book vs. Movie
+            </h1>
+            <p className="mt-2 text-zinc-600 dark:text-zinc-400">
+              A crowdsourced reference for what changed between the book and
+              the movie.
+            </p>
+          </div>
+          <Link
+            href="/submit"
+            className="inline-block shrink-0 rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-300"
+          >
+            + Submit a difference
+          </Link>
         </header>
 
         <form

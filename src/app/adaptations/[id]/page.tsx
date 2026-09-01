@@ -1,26 +1,20 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import type { Adaptation, DifferenceCategory, DifferenceEntry } from "@/lib/types";
+import {
+  DIFFERENCE_CATEGORIES,
+  type Adaptation,
+  type DifferenceCategory,
+  type DifferenceEntry,
+} from "@/lib/types";
 import { DifferenceEntryCard } from "./difference-entry-card";
-
-// The fixed display order for categories, matching the spec. Only
-// categories that actually have entries for this adaptation get shown.
-const CATEGORY_ORDER: DifferenceCategory[] = [
-  "Plot",
-  "Ending",
-  "Character",
-  "Setting",
-  "Theme/Tone",
-  "Timeline",
-  "Omitted Content",
-  "Added Content",
-];
 
 export default async function AdaptationDetailPage({
   params,
+  searchParams,
 }: PageProps<"/adaptations/[id]">) {
   const { id } = await params;
+  const { submitted } = await searchParams;
   const supabase = await createClient();
 
   const { data: adaptation } = await supabase
@@ -60,6 +54,13 @@ export default async function AdaptationDetailPage({
           ← Back to all adaptations
         </Link>
 
+        {submitted === "1" && (
+          <p className="mt-4 rounded-lg border border-emerald-300 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-200">
+            Thanks! Your submission was received and is waiting for review
+            before it appears publicly.
+          </p>
+        )}
+
         <header className="mt-4 mb-10">
           <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
             {adaptation.title}
@@ -98,22 +99,29 @@ export default async function AdaptationDetailPage({
           </p>
         ) : (
           <div className="space-y-8">
-            {CATEGORY_ORDER.filter((category) => grouped.has(category)).map(
-              (category) => (
-                <section key={category}>
-                  <h2 className="mb-3 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-                    {category}
-                  </h2>
-                  <ul className="space-y-3">
-                    {grouped.get(category)!.map((entry) => (
-                      <DifferenceEntryCard key={entry.id} entry={entry} />
-                    ))}
-                  </ul>
-                </section>
-              )
-            )}
+            {DIFFERENCE_CATEGORIES.filter((category) =>
+              grouped.has(category)
+            ).map((category) => (
+              <section key={category}>
+                <h2 className="mb-3 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+                  {category}
+                </h2>
+                <ul className="space-y-3">
+                  {grouped.get(category)!.map((entry) => (
+                    <DifferenceEntryCard key={entry.id} entry={entry} />
+                  ))}
+                </ul>
+              </section>
+            ))}
           </div>
         )}
+
+        <Link
+          href={`/submit?adaptation=${adaptation.id}`}
+          className="mt-10 inline-block rounded-lg bg-zinc-900 px-5 py-2.5 font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-300"
+        >
+          + Submit a difference for this adaptation
+        </Link>
       </div>
     </div>
   );
