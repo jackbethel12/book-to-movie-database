@@ -115,8 +115,8 @@ export function SubmitForm({
         <textarea
           id="detail"
           name="detail"
-          rows={4}
-          placeholder="Add as much extra explanation as you'd like."
+          rows={8}
+          placeholder="Write as much as you'd like — a full write-up is welcome. Leave a blank line between paragraphs and they'll display as separate paragraphs."
           className={inputClasses}
         />
       </div>
