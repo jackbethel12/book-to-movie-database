@@ -91,6 +91,12 @@ export default async function AdaptationDetailPage({
               ))}
             </div>
           )}
+
+          {adaptation.synopsis && (
+            <p className="mt-6 text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
+              {adaptation.synopsis}
+            </p>
+          )}
         </header>
 
         {grouped.size === 0 ? (
@@ -98,19 +104,19 @@ export default async function AdaptationDetailPage({
             No differences have been logged for this adaptation yet.
           </p>
         ) : (
-          <div className="space-y-8">
+          <div className="space-y-10">
             {DIFFERENCE_CATEGORIES.filter((category) =>
               grouped.has(category)
             ).map((category) => (
               <section key={category}>
-                <h2 className="mb-3 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+                <h2 className="mb-3 border-b border-zinc-200 pb-2 text-xl font-semibold text-zinc-900 dark:border-zinc-800 dark:text-zinc-50">
                   {category}
                 </h2>
-                <ul className="space-y-3">
+                <div className="space-y-4">
                   {grouped.get(category)!.map((entry) => (
                     <DifferenceEntryCard key={entry.id} entry={entry} />
                   ))}
-                </ul>
+                </div>
               </section>
             ))}
           </div>

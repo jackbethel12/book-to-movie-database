@@ -26,6 +26,7 @@ export type Adaptation = {
   director: string | null;
   movie_release_year: number | null;
   genres: string[];
+  synopsis: string | null;
   book_cover_url: string | null;
   movie_poster_url: string | null;
   goodreads_id: string | null;

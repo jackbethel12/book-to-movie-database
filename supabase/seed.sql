@@ -7,14 +7,14 @@
 -- re-running this won't create duplicates.
 -- ============================================================================
 
-insert into adaptations (id, title, author, book_publish_year, movie_title, director, movie_release_year, genres)
+insert into adaptations (id, title, author, book_publish_year, movie_title, director, movie_release_year, genres, synopsis)
 values
-  ('9fb27472-835f-4935-a80c-100bef23e037', 'Harry Potter and the Sorcerer''s Stone', 'J.K. Rowling', 1997, 'Harry Potter and the Sorcerer''s Stone', 'Chris Columbus', 2001, array['Fantasy', 'Young Adult']),
-  ('e08eb5a9-e483-4434-9eb1-8ba8874bf6f7', 'The Fellowship of the Ring', 'J.R.R. Tolkien', 1954, 'The Lord of the Rings: The Fellowship of the Ring', 'Peter Jackson', 2001, array['Fantasy', 'Adventure']),
-  ('205715d7-cf7a-48b1-a654-d00a072ce1ee', 'The Shining', 'Stephen King', 1977, 'The Shining', 'Stanley Kubrick', 1980, array['Horror']),
-  ('7ac48b57-8ddd-4545-a9ac-76bafbe03988', 'Jurassic Park', 'Michael Crichton', 1990, 'Jurassic Park', 'Steven Spielberg', 1993, array['Science Fiction', 'Adventure']),
-  ('41039f5e-8e35-4169-884e-126b77ed6d39', 'The Hunger Games', 'Suzanne Collins', 2008, 'The Hunger Games', 'Gary Ross', 2012, array['Dystopian', 'Young Adult']),
-  ('1f266fa2-f740-4988-a012-38cb0200590b', 'Gone Girl', 'Gillian Flynn', 2012, 'Gone Girl', 'David Fincher', 2014, array['Thriller', 'Mystery'])
+  ('9fb27472-835f-4935-a80c-100bef23e037', 'Harry Potter and the Sorcerer''s Stone', 'J.K. Rowling', 1997, 'Harry Potter and the Sorcerer''s Stone', 'Chris Columbus', 2001, array['Fantasy', 'Young Adult'], 'An orphaned boy discovers on his eleventh birthday that he''s a wizard, and is whisked away to Hogwarts School of Witchcraft and Wizardry. There, alongside new friends Ron and Hermione, he begins to unravel the mystery of his parents'' deaths and the return of a dark wizard everyone is too afraid to name.'),
+  ('e08eb5a9-e483-4434-9eb1-8ba8874bf6f7', 'The Fellowship of the Ring', 'J.R.R. Tolkien', 1954, 'The Lord of the Rings: The Fellowship of the Ring', 'Peter Jackson', 2001, array['Fantasy', 'Adventure'], 'A young hobbit named Frodo inherits a magic ring that turns out to be the key to the Dark Lord Sauron''s power. Along with eight companions, he sets out from the peaceful Shire on a perilous journey to destroy the ring before it falls into the wrong hands.'),
+  ('205715d7-cf7a-48b1-a654-d00a072ce1ee', 'The Shining', 'Stephen King', 1977, 'The Shining', 'Stanley Kubrick', 1980, array['Horror'], 'A recovering alcoholic takes a job as the off-season caretaker of a remote, historic hotel, moving in with his wife and young son for the winter. As the family settles into the empty building, the hotel''s dark past begins to seep into the present.'),
+  ('7ac48b57-8ddd-4545-a9ac-76bafbe03988', 'Jurassic Park', 'Michael Crichton', 1990, 'Jurassic Park', 'Steven Spielberg', 1993, array['Science Fiction', 'Adventure'], 'A billionaire opens a theme park populated with cloned dinosaurs brought back from extinction through genetic engineering. When the park''s security systems fail during a visit from a group of scientists and the owner''s grandchildren, the dinosaurs get loose.'),
+  ('41039f5e-8e35-4169-884e-126b77ed6d39', 'The Hunger Games', 'Suzanne Collins', 2008, 'The Hunger Games', 'Gary Ross', 2012, array['Dystopian', 'Young Adult'], 'In a dystopian future, a teenage girl volunteers to take her younger sister''s place in a televised fight to the death between children from each of the country''s twelve districts. She must survive both the arena and the politics of the spectacle surrounding it.'),
+  ('1f266fa2-f740-4988-a012-38cb0200590b', 'Gone Girl', 'Gillian Flynn', 2012, 'Gone Girl', 'David Fincher', 2014, array['Thriller', 'Mystery'], 'On his fifth wedding anniversary, a man reports that his wife has gone missing from their home, and the case quickly becomes a media sensation. As the police investigation and public suspicion close in on him, the true story behind the marriage begins to come apart.')
 on conflict (id) do nothing;
 
 -- difference_entries rows don't have fixed IDs (a real submission form
