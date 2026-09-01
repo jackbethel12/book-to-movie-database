@@ -11,6 +11,16 @@ export async function SiteHeader() {
     data: { user },
   } = await supabase.auth.getUser();
 
+  let isAdmin = false;
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("is_admin")
+      .eq("id", user.id)
+      .single();
+    isAdmin = profile?.is_admin ?? false;
+  }
+
   return (
     <div className="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3 text-sm">
@@ -27,6 +37,14 @@ export async function SiteHeader() {
           >
             Submit
           </Link>
+          {isAdmin && (
+            <Link
+              href="/admin"
+              className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+            >
+              Moderate
+            </Link>
+          )}
           {user ? (
             <div className="flex items-center gap-3">
               <span className="hidden text-zinc-500 sm:inline dark:text-zinc-400">
