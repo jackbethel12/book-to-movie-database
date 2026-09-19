@@ -14,7 +14,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Book vs. Movie",
+  title: {
+    template: "%s | Book vs. Movie",
+    default: "Book vs. Movie",
+  },
   description:
     "A crowdsourced reference for what changed between the book and the movie.",
 };

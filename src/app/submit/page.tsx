@@ -1,6 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { SubmitForm } from "./submit-form";
+
+export const metadata: Metadata = {
+  title: "Submit a difference",
+};
 
 export default async function SubmitPage({
   searchParams,

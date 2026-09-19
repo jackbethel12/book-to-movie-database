@@ -1,8 +1,13 @@
+import type { Metadata } from "next";
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { Adaptation } from "@/lib/types";
 import { EditAdaptationForm } from "./edit-adaptation-form";
+
+export const metadata: Metadata = {
+  title: "Edit adaptation",
+};
 
 export default async function EditAdaptationPage({
   params,

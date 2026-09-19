@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
@@ -8,6 +9,20 @@ import {
   type DifferenceEntry,
 } from "@/lib/types";
 import { DifferenceEntryCard } from "./difference-entry-card";
+
+export async function generateMetadata({
+  params,
+}: PageProps<"/adaptations/[id]">): Promise<Metadata> {
+  const { id } = await params;
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("adaptations")
+    .select("title")
+    .eq("id", id)
+    .single();
+
+  return { title: data?.title ?? "Adaptation not found" };
+}
 
 export default async function AdaptationDetailPage({
   params,

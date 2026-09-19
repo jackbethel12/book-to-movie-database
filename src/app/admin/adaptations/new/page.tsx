@@ -1,7 +1,12 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { NewAdaptationForm } from "./new-adaptation-form";
+
+export const metadata: Metadata = {
+  title: "Add an adaptation",
+};
 
 export default async function NewAdaptationPage() {
   const supabase = await createClient();

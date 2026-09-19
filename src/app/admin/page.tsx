@@ -1,9 +1,14 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { DifferenceEntry } from "@/lib/types";
 import { approveEntry, rejectEntry, deleteEntry } from "./actions";
 import { ConfirmDeleteButton } from "./confirm-delete-button";
+
+export const metadata: Metadata = {
+  title: "Moderation queue",
+};
 
 type EntryWithAdaptation = DifferenceEntry & {
   adaptations: { title: string; movie_title: string | null } | null;
