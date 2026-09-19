@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { DifferenceEntry } from "@/lib/types";
 import { approveEntry, rejectEntry, deleteEntry } from "./actions";
+import { ConfirmDeleteButton } from "./confirm-delete-button";
 
 type EntryWithAdaptation = DifferenceEntry & {
   adaptations: { title: string; movie_title: string | null } | null;
@@ -135,12 +136,12 @@ export default async function AdminPage() {
                   </p>
                 </div>
                 <form action={deleteEntry.bind(null, entry.id)}>
-                  <button
-                    type="submit"
+                  <ConfirmDeleteButton
+                    confirmMessage={`Delete this entry?\n\n"${entry.summary}"\n\nThis can't be undone.`}
                     className="shrink-0 rounded-lg border border-red-300 px-3 py-1.5 text-sm font-medium text-red-700 transition-colors hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950"
                   >
                     Delete
-                  </button>
+                  </ConfirmDeleteButton>
                 </form>
               </div>
             ))}
