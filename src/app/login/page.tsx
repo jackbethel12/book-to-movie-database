@@ -7,7 +7,7 @@ export default async function LoginPage({
   const hadError = params.error === "auth";
 
   return (
-    <div className="min-h-full bg-zinc-50 dark:bg-black">
+    <div className="min-h-full bg-amber-50 dark:bg-indigo-950">
       <div className="mx-auto max-w-sm px-6 py-16">
         <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
           Log in

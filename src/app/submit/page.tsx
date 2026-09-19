@@ -16,7 +16,7 @@ export default async function SubmitPage({
     .order("title", { ascending: true });
 
   return (
-    <div className="min-h-full bg-zinc-50 dark:bg-black">
+    <div className="min-h-full bg-amber-50 dark:bg-indigo-950">
       <div className="mx-auto max-w-xl px-6 py-12">
         <Link
           href="/"

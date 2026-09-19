@@ -59,7 +59,7 @@ export default async function Home({
   }
 
   return (
-    <div className="min-h-full bg-zinc-50 dark:bg-black">
+    <div className="min-h-full bg-amber-50 dark:bg-indigo-950">
       <div className="mx-auto max-w-5xl px-6 py-12">
         <header className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
@@ -88,12 +88,12 @@ export default async function Home({
             name="q"
             defaultValue={q}
             placeholder="Search by title, author, or director…"
-            className="w-full rounded-lg border border-zinc-300 bg-white px-4 py-2 text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 sm:flex-1"
+            className="w-full rounded-lg border border-amber-300 bg-white px-4 py-2 text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none dark:border-indigo-700 dark:bg-indigo-950 dark:text-zinc-50 sm:flex-1"
           />
           <select
             name="genre"
             defaultValue={genre}
-            className="w-full rounded-lg border border-zinc-300 bg-white px-4 py-2 text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 sm:w-56"
+            className="w-full rounded-lg border border-amber-300 bg-white px-4 py-2 text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none dark:border-indigo-700 dark:bg-indigo-950 dark:text-zinc-50 sm:w-56"
           >
             <option value="">All genres</option>
             {allGenres.map((g) => (
@@ -128,9 +128,9 @@ export default async function Home({
               <li key={adaptation.id}>
                 <Link
                   href={`/adaptations/${adaptation.id}`}
-                  className="flex gap-4 rounded-xl border border-zinc-200 bg-white p-5 shadow-sm transition-colors hover:border-indigo-300 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-indigo-700"
+                  className="flex gap-4 rounded-xl border border-amber-200 bg-white p-5 shadow-sm transition-colors hover:border-indigo-300 hover:shadow-md dark:border-indigo-800 dark:bg-indigo-900 dark:hover:border-indigo-500"
                 >
-                <div className="flex h-24 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-800">
+                <div className="flex h-24 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-amber-100 dark:bg-indigo-800">
                   {adaptation.movie_poster_url || adaptation.book_cover_url ? (
                     // eslint-disable-next-line @next/next/no-img-element -- covers/posters are pasted from arbitrary external sites, so next/image's fixed domain allowlist doesn't fit here.
                     <img

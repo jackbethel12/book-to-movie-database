@@ -13,7 +13,7 @@ type AdaptationOption = {
 const initialState: SubmitState = { error: null };
 
 const inputClasses =
-  "mt-1 w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-zinc-900 shadow-sm focus:border-zinc-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50";
+  "mt-1 w-full rounded-lg border border-amber-300 bg-white px-3 py-2 text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none dark:border-indigo-700 dark:bg-indigo-950 dark:text-zinc-50";
 
 export function SubmitForm({
   adaptations,
