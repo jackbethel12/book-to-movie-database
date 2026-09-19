@@ -18,7 +18,7 @@ type DefaultValues = {
 };
 
 const inputClasses =
-  "mt-1 w-full rounded-lg border border-amber-300 bg-white px-3 py-2 text-stone-900 shadow-sm focus:border-amber-700 focus:outline-none dark:focus:border-amber-500 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-50";
+  "mt-1 w-full rounded-lg border border-stone-300 bg-stone-50 px-3 py-2 text-stone-900 shadow-sm focus:border-amber-700 focus:outline-none dark:focus:border-amber-500 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-50";
 
 const labelClasses =
   "block text-sm font-medium text-stone-700 dark:text-stone-300";

@@ -38,7 +38,7 @@ export default async function EditAdaptationPage({
   }
 
   return (
-    <div className="min-h-full bg-amber-50 dark:bg-stone-950">
+    <div className="min-h-full bg-stone-100 dark:bg-stone-950">
       <div className="mx-auto max-w-xl px-6 py-12">
         <Link
           href={`/adaptations/${adaptation.id}`}

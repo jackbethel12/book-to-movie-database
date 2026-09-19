@@ -22,7 +22,7 @@ export async function SiteHeader() {
   }
 
   return (
-    <div className="border-b border-amber-200 bg-white dark:border-stone-800 dark:bg-stone-950">
+    <div className="border-b border-stone-300 bg-stone-50 dark:border-stone-800 dark:bg-stone-950">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3 text-sm">
         <Link
           href="/"

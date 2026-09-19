@@ -46,7 +46,7 @@ export default async function AdminPage() {
     .returns<EntryWithAdaptation[]>();
 
   return (
-    <div className="min-h-full bg-amber-50 dark:bg-stone-950">
+    <div className="min-h-full bg-stone-100 dark:bg-stone-950">
       <div className="mx-auto max-w-3xl px-6 py-12">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
@@ -75,7 +75,7 @@ export default async function AdminPage() {
             {pending.map((entry) => (
               <div
                 key={entry.id}
-                className="rounded-lg border border-amber-200 bg-white p-5 dark:border-stone-800 dark:bg-stone-900"
+                className="rounded-lg border border-stone-300 bg-stone-50 p-5 dark:border-stone-800 dark:bg-stone-900"
               >
                 <EntryMeta entry={entry} />
                 <p className="mt-2 font-medium text-stone-900 dark:text-stone-50">
@@ -127,7 +127,7 @@ export default async function AdminPage() {
             {approved.map((entry) => (
               <div
                 key={entry.id}
-                className="flex items-start justify-between gap-4 rounded-lg border border-amber-200 bg-white p-4 dark:border-stone-800 dark:bg-stone-900"
+                className="flex items-start justify-between gap-4 rounded-lg border border-stone-300 bg-stone-50 p-4 dark:border-stone-800 dark:bg-stone-900"
               >
                 <div className="min-w-0">
                   <EntryMeta entry={entry} />

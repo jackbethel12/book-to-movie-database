@@ -59,7 +59,7 @@ export default async function AdaptationDetailPage({
   }
 
   return (
-    <div className="min-h-full bg-amber-50 dark:bg-stone-950">
+    <div className="min-h-full bg-stone-100 dark:bg-stone-950">
       <div className="mx-auto max-w-3xl px-6 py-12">
         <Link
           href="/"
@@ -158,7 +158,7 @@ export default async function AdaptationDetailPage({
               grouped.has(category)
             ).map((category) => (
               <section key={category}>
-                <h2 className="mb-3 border-b border-amber-200 pb-2 text-xl font-semibold text-stone-900 dark:border-stone-800 dark:text-stone-50">
+                <h2 className="mb-3 border-b border-stone-300 pb-2 text-xl font-semibold text-stone-900 dark:border-stone-800 dark:text-stone-50">
                   {category}
                 </h2>
                 <div className="space-y-4">
