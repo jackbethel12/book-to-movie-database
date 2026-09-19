@@ -11,7 +11,11 @@ export default async function Home({
 }: PageProps<"/">) {
   const params = await searchParams;
   const q = typeof params.q === "string" ? params.q.trim() : "";
-  const genre = typeof params.genre === "string" ? params.genre : "";
+  const selectedGenres = Array.isArray(params.genre)
+    ? params.genre
+    : typeof params.genre === "string" && params.genre
+      ? [params.genre]
+      : [];
 
   const supabase = await createClient();
 
@@ -30,8 +34,9 @@ export default async function Home({
     );
   }
 
-  if (genre) {
-    query = query.contains("genres", [genre]);
+  if (selectedGenres.length > 0) {
+    // Matches an adaptation tagged with ANY of the selected genres.
+    query = query.overlaps("genres", selectedGenres);
   }
 
   const { data: adaptations, error } = await query;
@@ -79,35 +84,41 @@ export default async function Home({
           </Link>
         </header>
 
-        <form
-          method="GET"
-          className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center"
-        >
-          <input
-            type="text"
-            name="q"
-            defaultValue={q}
-            placeholder="Search by title, author, or director…"
-            className="w-full rounded-lg border border-stone-300 bg-stone-50 px-4 py-2 text-stone-900 shadow-sm focus:border-amber-700 focus:outline-none dark:focus:border-amber-500 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-50 sm:flex-1"
-          />
-          <select
-            name="genre"
-            defaultValue={genre}
-            className="w-full rounded-lg border border-stone-300 bg-stone-50 px-4 py-2 text-stone-900 shadow-sm focus:border-amber-700 focus:outline-none dark:focus:border-amber-500 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-50 sm:w-56"
-          >
-            <option value="">All genres</option>
-            {allGenres.map((g) => (
-              <option key={g} value={g}>
-                {g}
-              </option>
-            ))}
-          </select>
-          <button
-            type="submit"
-            className="w-full rounded-lg bg-amber-800 px-5 py-2 font-medium text-white transition-colors hover:bg-amber-900 dark:bg-amber-600 dark:hover:bg-amber-500 sm:w-auto"
-          >
-            Search
-          </button>
+        <form method="GET" className="mb-8 space-y-3">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <input
+              type="text"
+              name="q"
+              defaultValue={q}
+              placeholder="Search by title, author, or director…"
+              className="w-full rounded-lg border border-stone-300 bg-stone-50 px-4 py-2 text-stone-900 shadow-sm focus:border-amber-700 focus:outline-none dark:focus:border-amber-500 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-50 sm:flex-1"
+            />
+            <button
+              type="submit"
+              className="w-full rounded-lg bg-amber-800 px-5 py-2 font-medium text-white transition-colors hover:bg-amber-900 dark:bg-amber-600 dark:hover:bg-amber-500 sm:w-auto"
+            >
+              Search
+            </button>
+          </div>
+
+          {allGenres.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {allGenres.map((g) => (
+                <label key={g} className="cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="genre"
+                    value={g}
+                    defaultChecked={selectedGenres.includes(g)}
+                    className="peer sr-only"
+                  />
+                  <span className="inline-block rounded-full border border-stone-300 bg-stone-50 px-3 py-1 text-sm text-stone-700 transition-colors peer-checked:border-amber-800 peer-checked:bg-amber-800 peer-checked:text-white dark:border-stone-700 dark:bg-stone-950 dark:text-stone-300 dark:peer-checked:border-amber-600 dark:peer-checked:bg-amber-600">
+                    {g}
+                  </span>
+                </label>
+              ))}
+            </div>
+          )}
         </form>
 
         {error && (
