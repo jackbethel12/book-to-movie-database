@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { DifferenceEntry } from "@/lib/types";
 import { approveEntry, rejectEntry, deleteEntry } from "./actions";
@@ -46,13 +47,23 @@ export default async function AdminPage() {
   return (
     <div className="min-h-full bg-zinc-50 dark:bg-black">
       <div className="mx-auto max-w-3xl px-6 py-12">
-        <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Moderation queue
-        </h1>
-        <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-          {pending?.length ?? 0} submission
-          {pending?.length === 1 ? "" : "s"} waiting for review.
-        </p>
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+              Moderation queue
+            </h1>
+            <p className="mt-2 text-zinc-600 dark:text-zinc-400">
+              {pending?.length ?? 0} submission
+              {pending?.length === 1 ? "" : "s"} waiting for review.
+            </p>
+          </div>
+          <Link
+            href="/admin/adaptations/new"
+            className="shrink-0 rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-300"
+          >
+            + Add adaptation
+          </Link>
+        </div>
 
         {!pending || pending.length === 0 ? (
           <p className="mt-8 text-zinc-600 dark:text-zinc-400">
