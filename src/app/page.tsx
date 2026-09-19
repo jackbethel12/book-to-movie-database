@@ -73,7 +73,7 @@ export default async function Home({
           </div>
           <Link
             href="/submit"
-            className="inline-block shrink-0 rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-300"
+            className="inline-block shrink-0 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-400"
           >
             + Submit a difference
           </Link>
@@ -104,7 +104,7 @@ export default async function Home({
           </select>
           <button
             type="submit"
-            className="w-full rounded-lg bg-zinc-900 px-5 py-2 font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-300 sm:w-auto"
+            className="w-full rounded-lg bg-indigo-600 px-5 py-2 font-medium text-white transition-colors hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-400 sm:w-auto"
           >
             Search
           </button>
@@ -128,8 +128,27 @@ export default async function Home({
               <li key={adaptation.id}>
                 <Link
                   href={`/adaptations/${adaptation.id}`}
-                  className="block rounded-xl border border-zinc-200 bg-white p-5 shadow-sm transition-colors hover:border-zinc-400 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-600"
+                  className="flex gap-4 rounded-xl border border-zinc-200 bg-white p-5 shadow-sm transition-colors hover:border-indigo-300 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-indigo-700"
                 >
+                <div className="flex h-24 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-zinc-100 dark:bg-zinc-800">
+                  {adaptation.movie_poster_url || adaptation.book_cover_url ? (
+                    // eslint-disable-next-line @next/next/no-img-element -- covers/posters are pasted from arbitrary external sites, so next/image's fixed domain allowlist doesn't fit here.
+                    <img
+                      src={
+                        adaptation.movie_poster_url ??
+                        adaptation.book_cover_url ??
+                        undefined
+                      }
+                      alt=""
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-2xl" aria-hidden>
+                      🎬
+                    </span>
+                  )}
+                </div>
+                <div className="min-w-0 flex-1">
                 <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
                   {adaptation.title}
                 </h2>
@@ -177,6 +196,7 @@ export default async function Home({
                   {differenceCounts.get(adaptation.id) ?? 0} difference
                   {differenceCounts.get(adaptation.id) === 1 ? "" : "s"} logged
                 </p>
+                </div>
                 </Link>
               </li>
             ))}

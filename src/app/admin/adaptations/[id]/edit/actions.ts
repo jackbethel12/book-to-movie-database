@@ -5,12 +5,13 @@ import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/require-admin";
 import { parseAdaptationFormData } from "@/lib/adaptation-form";
 
-export type CreateAdaptationState = { error: string | null };
+export type UpdateAdaptationState = { error: string | null };
 
-export async function createAdaptation(
-  _prevState: CreateAdaptationState,
+export async function updateAdaptation(
+  adaptationId: string,
+  _prevState: UpdateAdaptationState,
   formData: FormData
-): Promise<CreateAdaptationState> {
+): Promise<UpdateAdaptationState> {
   const parsed = parseAdaptationFormData(formData);
   if (parsed.error !== null) {
     return { error: parsed.error };
@@ -18,18 +19,17 @@ export async function createAdaptation(
 
   const supabase = await requireAdmin();
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from("adaptations")
-    .insert(parsed.values)
-    .select("id")
-    .single();
+    .update(parsed.values)
+    .eq("id", adaptationId);
 
-  if (error || !data) {
+  if (error) {
     return {
-      error: `Something went wrong saving this adaptation: ${error?.message ?? "unknown error"}`,
+      error: `Something went wrong saving these changes: ${error.message}`,
     };
   }
 
   revalidatePath("/", "layout");
-  redirect(`/adaptations/${data.id}`);
+  redirect(`/adaptations/${adaptationId}`);
 }

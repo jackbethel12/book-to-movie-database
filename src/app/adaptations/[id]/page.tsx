@@ -17,6 +17,20 @@ export default async function AdaptationDetailPage({
   const { submitted } = await searchParams;
   const supabase = await createClient();
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  let isAdmin = false;
+  if (user) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("is_admin")
+      .eq("id", user.id)
+      .single();
+    isAdmin = profile?.is_admin ?? false;
+  }
+
   const { data: adaptation } = await supabase
     .from("adaptations")
     .select("*")
@@ -61,42 +75,77 @@ export default async function AdaptationDetailPage({
           </p>
         )}
 
-        <header className="mt-4 mb-10">
-          <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
-            {adaptation.title}
-          </h1>
-          <p className="mt-1 text-zinc-600 dark:text-zinc-400">
-            {adaptation.author}
-            {adaptation.book_publish_year
-              ? ` · ${adaptation.book_publish_year}`
-              : ""}
-          </p>
-          <p className="mt-3 text-zinc-700 dark:text-zinc-300">
-            <span className="text-zinc-400 dark:text-zinc-500">Movie: </span>
-            {adaptation.movie_title}
-            {adaptation.movie_release_year
-              ? ` (${adaptation.movie_release_year})`
-              : ""}
-            {adaptation.director ? ` · dir. ${adaptation.director}` : ""}
-          </p>
-          {adaptation.genres.length > 0 && (
-            <div className="mt-3 flex flex-wrap gap-1.5">
-              {adaptation.genres.map((g) => (
-                <span
-                  key={g}
-                  className="rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
-                >
-                  {g}
-                </span>
-              ))}
+        <header className="mt-4 mb-10 flex flex-col gap-6 sm:flex-row">
+          {(adaptation.book_cover_url || adaptation.movie_poster_url) && (
+            <div className="flex shrink-0 gap-3">
+              {adaptation.book_cover_url && (
+                // eslint-disable-next-line @next/next/no-img-element -- covers/posters are pasted from arbitrary external sites, so next/image's fixed domain allowlist doesn't fit here.
+                <img
+                  src={adaptation.book_cover_url}
+                  alt={`${adaptation.title} book cover`}
+                  className="h-44 w-auto rounded-lg object-cover shadow-md"
+                />
+              )}
+              {adaptation.movie_poster_url && (
+                // eslint-disable-next-line @next/next/no-img-element -- see above.
+                <img
+                  src={adaptation.movie_poster_url}
+                  alt={`${adaptation.movie_title} movie poster`}
+                  className="h-44 w-auto rounded-lg object-cover shadow-md"
+                />
+              )}
             </div>
           )}
 
-          {adaptation.synopsis && (
-            <p className="mt-6 text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
-              {adaptation.synopsis}
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-start justify-between gap-2">
+              <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+                {adaptation.title}
+              </h1>
+              {isAdmin && (
+                <Link
+                  href={`/admin/adaptations/${adaptation.id}/edit`}
+                  className="text-sm font-medium text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
+                >
+                  Edit adaptation
+                </Link>
+              )}
+            </div>
+            <p className="mt-1 text-zinc-600 dark:text-zinc-400">
+              {adaptation.author}
+              {adaptation.book_publish_year
+                ? ` · ${adaptation.book_publish_year}`
+                : ""}
             </p>
-          )}
+            <p className="mt-3 text-zinc-700 dark:text-zinc-300">
+              <span className="text-zinc-400 dark:text-zinc-500">
+                Movie:{" "}
+              </span>
+              {adaptation.movie_title}
+              {adaptation.movie_release_year
+                ? ` (${adaptation.movie_release_year})`
+                : ""}
+              {adaptation.director ? ` · dir. ${adaptation.director}` : ""}
+            </p>
+            {adaptation.genres.length > 0 && (
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {adaptation.genres.map((g) => (
+                  <span
+                    key={g}
+                    className="rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
+                  >
+                    {g}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {adaptation.synopsis && (
+              <p className="mt-6 text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
+                {adaptation.synopsis}
+              </p>
+            )}
+          </div>
         </header>
 
         {grouped.size === 0 ? (
@@ -124,7 +173,7 @@ export default async function AdaptationDetailPage({
 
         <Link
           href={`/submit?adaptation=${adaptation.id}`}
-          className="mt-10 inline-block rounded-lg bg-zinc-900 px-5 py-2.5 font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-300"
+          className="mt-10 inline-block rounded-lg bg-indigo-600 px-5 py-2.5 font-medium text-white transition-colors hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-400"
         >
           + Submit a difference for this adaptation
         </Link>

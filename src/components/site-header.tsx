@@ -26,7 +26,7 @@ export async function SiteHeader() {
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3 text-sm">
         <Link
           href="/"
-          className="font-semibold text-zinc-900 dark:text-zinc-50"
+          className="font-semibold text-indigo-600 dark:text-indigo-400"
         >
           Book vs. Movie
         </Link>
@@ -62,7 +62,7 @@ export async function SiteHeader() {
           ) : (
             <Link
               href="/login"
-              className="rounded-lg bg-zinc-900 px-3 py-1.5 font-medium text-white transition-colors hover:bg-zinc-700 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-300"
+              className="rounded-lg bg-indigo-600 px-3 py-1.5 font-medium text-white transition-colors hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-400"
             >
               Log in
             </Link>
