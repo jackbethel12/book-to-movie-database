@@ -6,7 +6,6 @@ import {
   type Adaptation,
   type DifferenceCategory,
   type DifferenceEntry,
-  type VoteType,
 } from "@/lib/types";
 import { DifferenceEntryCard } from "./difference-entry-card";
 
@@ -17,10 +16,6 @@ export default async function AdaptationDetailPage({
   const { id } = await params;
   const { submitted } = await searchParams;
   const supabase = await createClient();
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
 
   const { data: adaptation } = await supabase
     .from("adaptations")
@@ -33,7 +28,7 @@ export default async function AdaptationDetailPage({
   }
 
   // Only show entries a moderator has approved — pending/rejected ones stay
-  // invisible to regular visitors.
+  // invisible to regular visitors (moderation queue comes in a later step).
   const { data: entries } = await supabase
     .from("difference_entries")
     .select("*")
@@ -42,32 +37,11 @@ export default async function AdaptationDetailPage({
     .order("created_at", { ascending: true })
     .returns<DifferenceEntry[]>();
 
-  // Find out how the current visitor (if logged in) already voted on these,
-  // so their arrow shows as already pressed instead of resetting each visit.
-  const myVotes = new Map<string, VoteType>();
-  if (user && entries && entries.length > 0) {
-    const { data: voteRows } = await supabase
-      .from("entry_votes")
-      .select("entry_id, vote_type")
-      .eq("user_id", user.id)
-      .in(
-        "entry_id",
-        entries.map((e) => e.id)
-      );
-    for (const row of voteRows ?? []) {
-      myVotes.set(row.entry_id, row.vote_type as VoteType);
-    }
-  }
-
   const grouped = new Map<DifferenceCategory, DifferenceEntry[]>();
   for (const entry of entries ?? []) {
     const list = grouped.get(entry.category) ?? [];
     list.push(entry);
     grouped.set(entry.category, list);
-  }
-  // Top-voted entries surface first within each category.
-  for (const list of grouped.values()) {
-    list.sort((a, b) => b.upvotes - b.downvotes - (a.upvotes - a.downvotes));
   }
 
   return (
@@ -140,13 +114,7 @@ export default async function AdaptationDetailPage({
                 </h2>
                 <div className="space-y-4">
                   {grouped.get(category)!.map((entry) => (
-                    <DifferenceEntryCard
-                      key={entry.id}
-                      entry={entry}
-                      adaptationId={adaptation.id}
-                      loggedIn={!!user}
-                      myVote={myVotes.get(entry.id) ?? null}
-                    />
+                    <DifferenceEntryCard key={entry.id} entry={entry} />
                   ))}
                 </div>
               </section>

@@ -1,26 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import type { DifferenceEntry, VoteType } from "@/lib/types";
-import { castVote } from "@/lib/actions/votes";
+import type { DifferenceEntry } from "@/lib/types";
 
 // A single "here's what changed" entry, written to read as part of a
 // flowing write-up rather than an isolated card. If it's flagged as a
 // spoiler, it starts hidden behind a click-to-reveal prompt (the only bit
 // of this page that needs to run in the browser, since it reacts to a click
 // without reloading the page).
-export function DifferenceEntryCard({
-  entry,
-  adaptationId,
-  loggedIn,
-  myVote,
-}: {
-  entry: DifferenceEntry;
-  adaptationId: string;
-  loggedIn: boolean;
-  myVote: VoteType | null;
-}) {
+export function DifferenceEntryCard({ entry }: { entry: DifferenceEntry }) {
   const [revealed, setRevealed] = useState(!entry.spoiler_flag);
 
   if (entry.spoiler_flag && !revealed) {
@@ -62,6 +50,8 @@ export function DifferenceEntryCard({
         <strong className="font-semibold text-zinc-900 dark:text-zinc-50">
           {entry.summary}
         </strong>
+        {/* A single short paragraph of detail just continues right after
+            the bold summary sentence, so brief entries stay compact. */}
         {detailParagraphs.length === 1 && <> {detailParagraphs[0]}</>}
       </p>
       {detailParagraphs.length > 1 &&
@@ -70,51 +60,6 @@ export function DifferenceEntryCard({
             {paragraph}
           </p>
         ))}
-
-      <div className="mt-2 flex items-center gap-3 text-sm">
-        {loggedIn ? (
-          <>
-            <form action={castVote.bind(null, entry.id, adaptationId, "up")}>
-              <button
-                type="submit"
-                className={`flex items-center gap-1 rounded-md px-2 py-1 transition-colors ${
-                  myVote === "up"
-                    ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300"
-                    : "text-zinc-500 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
-                }`}
-              >
-                <span aria-hidden>▲</span> {entry.upvotes}
-              </button>
-            </form>
-            <form
-              action={castVote.bind(null, entry.id, adaptationId, "down")}
-            >
-              <button
-                type="submit"
-                className={`flex items-center gap-1 rounded-md px-2 py-1 transition-colors ${
-                  myVote === "down"
-                    ? "bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300"
-                    : "text-zinc-500 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
-                }`}
-              >
-                <span aria-hidden>▼</span> {entry.downvotes}
-              </button>
-            </form>
-          </>
-        ) : (
-          <>
-            <span className="text-zinc-400 dark:text-zinc-500">
-              ▲ {entry.upvotes} · ▼ {entry.downvotes}
-            </span>
-            <Link
-              href="/login"
-              className="text-zinc-500 underline hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
-            >
-              Log in to vote
-            </Link>
-          </>
-        )}
-      </div>
     </div>
   );
 }

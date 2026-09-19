@@ -17,8 +17,6 @@ export type DifferenceCategory = (typeof DIFFERENCE_CATEGORIES)[number];
 
 export type DifferenceStatus = "pending" | "approved" | "rejected";
 
-export type VoteType = "up" | "down";
-
 export type Adaptation = {
   id: string;
   title: string;
