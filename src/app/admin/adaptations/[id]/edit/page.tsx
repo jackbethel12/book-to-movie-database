@@ -40,6 +40,7 @@ export default async function EditAdaptationPage({
   return (
     <div className="min-h-full bg-purple-600 dark:bg-purple-950">
       <div className="mx-auto max-w-xl px-6 py-12">
+      <div className="rounded-2xl bg-stone-50 p-6 shadow-xl sm:p-10 dark:bg-stone-900">
         <Link
           href={`/adaptations/${adaptation.id}`}
           className="text-sm font-medium text-stone-500 hover:text-stone-800 dark:text-stone-400 dark:hover:text-stone-200"
@@ -54,6 +55,7 @@ export default async function EditAdaptationPage({
         </header>
 
         <EditAdaptationForm adaptation={adaptation} />
+      </div>
       </div>
     </div>
   );

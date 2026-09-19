@@ -9,6 +9,7 @@ export default async function LoginPage({
   return (
     <div className="min-h-full bg-purple-600 dark:bg-purple-950">
       <div className="mx-auto max-w-sm px-6 py-16">
+      <div className="rounded-2xl bg-stone-50 p-6 shadow-xl sm:p-10 dark:bg-stone-900">
         <h1 className="text-2xl font-bold tracking-tight text-stone-900 dark:text-stone-50">
           Log in
         </h1>
@@ -27,6 +28,7 @@ export default async function LoginPage({
         <div className="mt-6">
           <LoginForm />
         </div>
+      </div>
       </div>
     </div>
   );
