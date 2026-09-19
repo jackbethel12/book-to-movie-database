@@ -46,7 +46,7 @@ export default async function AdminPage() {
     .returns<EntryWithAdaptation[]>();
 
   return (
-    <div className="min-h-full bg-purple-600 dark:bg-purple-950">
+    <div className="min-h-full bg-[#C49A75]">
       <div className="mx-auto max-w-3xl px-6 py-12">
       <div className="rounded-2xl bg-stone-50 p-6 shadow-xl sm:p-10 dark:bg-stone-900">
         <div className="flex flex-wrap items-start justify-between gap-4">

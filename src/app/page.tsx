@@ -59,14 +59,14 @@ export default async function Home({
   }
 
   return (
-    <div className="min-h-full bg-purple-600 dark:bg-purple-950">
+    <div className="min-h-full bg-[#C49A75]">
       <div className="mx-auto max-w-5xl px-6 py-12">
         <header className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-white">
+            <h1 className="text-3xl font-bold tracking-tight text-stone-900">
               Book vs. Movie
             </h1>
-            <p className="mt-2 text-purple-100">
+            <p className="mt-2 text-stone-800">
               A crowdsourced reference for what changed between the book and
               the movie.
             </p>
@@ -117,7 +117,7 @@ export default async function Home({
         )}
 
         {!error && adaptations && adaptations.length === 0 && (
-          <p className="text-purple-100">No adaptations match your search.</p>
+          <p className="text-stone-800">No adaptations match your search.</p>
         )}
 
         {!error && adaptations && adaptations.length > 0 && (
