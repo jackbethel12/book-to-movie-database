@@ -16,20 +16,20 @@ export default async function SubmitPage({
     .order("title", { ascending: true });
 
   return (
-    <div className="min-h-full bg-amber-50 dark:bg-indigo-950">
+    <div className="min-h-full bg-amber-50 dark:bg-stone-950">
       <div className="mx-auto max-w-xl px-6 py-12">
         <Link
           href="/"
-          className="text-sm font-medium text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
+          className="text-sm font-medium text-stone-500 hover:text-stone-800 dark:text-stone-400 dark:hover:text-stone-200"
         >
           ← Back to all adaptations
         </Link>
 
         <header className="mt-4 mb-8">
-          <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+          <h1 className="text-3xl font-bold tracking-tight text-stone-900 dark:text-stone-50">
             Submit a difference
           </h1>
-          <p className="mt-2 text-zinc-600 dark:text-zinc-400">
+          <p className="mt-2 text-stone-600 dark:text-stone-400">
             Found something the movie changed from the book? Log it here.
             Every submission is reviewed before it appears publicly.
           </p>

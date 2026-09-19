@@ -37,7 +37,7 @@ export function DifferenceEntryCard({ entry }: { entry: DifferenceEntry }) {
     : [];
 
   const proseClasses =
-    "text-base leading-relaxed text-zinc-700 dark:text-zinc-300";
+    "text-base leading-relaxed text-stone-700 dark:text-stone-300";
 
   return (
     <div>
@@ -47,7 +47,7 @@ export function DifferenceEntryCard({ entry }: { entry: DifferenceEntry }) {
             Spoiler
           </span>
         )}
-        <strong className="font-semibold text-zinc-900 dark:text-zinc-50">
+        <strong className="font-semibold text-stone-900 dark:text-stone-50">
           {entry.summary}
         </strong>
         {/* A single short paragraph of detail just continues right after

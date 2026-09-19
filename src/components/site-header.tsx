@@ -22,38 +22,38 @@ export async function SiteHeader() {
   }
 
   return (
-    <div className="border-b border-amber-200 bg-white dark:border-indigo-800 dark:bg-indigo-950">
+    <div className="border-b border-amber-200 bg-white dark:border-stone-800 dark:bg-stone-950">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3 text-sm">
         <Link
           href="/"
-          className="font-semibold text-indigo-600 dark:text-indigo-400"
+          className="font-semibold text-amber-800 dark:text-amber-500"
         >
           Book vs. Movie
         </Link>
         <div className="flex items-center gap-4">
           <Link
             href="/submit"
-            className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+            className="text-stone-600 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100"
           >
             Submit
           </Link>
           {isAdmin && (
             <Link
               href="/admin"
-              className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+              className="text-stone-600 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100"
             >
               Moderate
             </Link>
           )}
           {user ? (
             <div className="flex items-center gap-3">
-              <span className="hidden text-zinc-500 sm:inline dark:text-zinc-400">
+              <span className="hidden text-stone-500 sm:inline dark:text-stone-400">
                 {user.email}
               </span>
               <form action={signOut}>
                 <button
                   type="submit"
-                  className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+                  className="text-stone-600 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-100"
                 >
                   Log out
                 </button>
@@ -62,7 +62,7 @@ export async function SiteHeader() {
           ) : (
             <Link
               href="/login"
-              className="rounded-lg bg-indigo-600 px-3 py-1.5 font-medium text-white transition-colors hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-400"
+              className="rounded-lg bg-amber-800 px-3 py-1.5 font-medium text-white transition-colors hover:bg-amber-900 dark:bg-amber-600 dark:hover:bg-amber-500"
             >
               Log in
             </Link>

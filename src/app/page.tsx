@@ -59,21 +59,21 @@ export default async function Home({
   }
 
   return (
-    <div className="min-h-full bg-amber-50 dark:bg-indigo-950">
+    <div className="min-h-full bg-amber-50 dark:bg-stone-950">
       <div className="mx-auto max-w-5xl px-6 py-12">
         <header className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+            <h1 className="text-3xl font-bold tracking-tight text-stone-900 dark:text-stone-50">
               Book vs. Movie
             </h1>
-            <p className="mt-2 text-zinc-600 dark:text-zinc-400">
+            <p className="mt-2 text-stone-600 dark:text-stone-400">
               A crowdsourced reference for what changed between the book and
               the movie.
             </p>
           </div>
           <Link
             href="/submit"
-            className="inline-block shrink-0 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-400"
+            className="inline-block shrink-0 rounded-lg bg-amber-800 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-amber-900 dark:bg-amber-600 dark:hover:bg-amber-500"
           >
             + Submit a difference
           </Link>
@@ -88,12 +88,12 @@ export default async function Home({
             name="q"
             defaultValue={q}
             placeholder="Search by title, author, or director…"
-            className="w-full rounded-lg border border-amber-300 bg-white px-4 py-2 text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none dark:border-indigo-700 dark:bg-indigo-950 dark:text-zinc-50 sm:flex-1"
+            className="w-full rounded-lg border border-amber-300 bg-white px-4 py-2 text-stone-900 shadow-sm focus:border-amber-700 focus:outline-none dark:focus:border-amber-500 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-50 sm:flex-1"
           />
           <select
             name="genre"
             defaultValue={genre}
-            className="w-full rounded-lg border border-amber-300 bg-white px-4 py-2 text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none dark:border-indigo-700 dark:bg-indigo-950 dark:text-zinc-50 sm:w-56"
+            className="w-full rounded-lg border border-amber-300 bg-white px-4 py-2 text-stone-900 shadow-sm focus:border-amber-700 focus:outline-none dark:focus:border-amber-500 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-50 sm:w-56"
           >
             <option value="">All genres</option>
             {allGenres.map((g) => (
@@ -104,7 +104,7 @@ export default async function Home({
           </select>
           <button
             type="submit"
-            className="w-full rounded-lg bg-indigo-600 px-5 py-2 font-medium text-white transition-colors hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-400 sm:w-auto"
+            className="w-full rounded-lg bg-amber-800 px-5 py-2 font-medium text-white transition-colors hover:bg-amber-900 dark:bg-amber-600 dark:hover:bg-amber-500 sm:w-auto"
           >
             Search
           </button>
@@ -117,7 +117,7 @@ export default async function Home({
         )}
 
         {!error && adaptations && adaptations.length === 0 && (
-          <p className="text-zinc-600 dark:text-zinc-400">
+          <p className="text-stone-600 dark:text-stone-400">
             No adaptations match your search.
           </p>
         )}
@@ -128,9 +128,9 @@ export default async function Home({
               <li key={adaptation.id}>
                 <Link
                   href={`/adaptations/${adaptation.id}`}
-                  className="flex gap-4 rounded-xl border border-amber-200 bg-white p-5 shadow-sm transition-colors hover:border-indigo-300 hover:shadow-md dark:border-indigo-800 dark:bg-indigo-900 dark:hover:border-indigo-500"
+                  className="flex gap-4 rounded-xl border border-amber-200 bg-white p-5 shadow-sm transition-colors hover:border-amber-400 hover:shadow-md dark:border-stone-800 dark:bg-stone-900 dark:hover:border-amber-500"
                 >
-                <div className="flex h-24 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-amber-100 dark:bg-indigo-800">
+                <div className="flex h-24 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-amber-100 dark:bg-stone-800">
                   {adaptation.movie_poster_url || adaptation.book_cover_url ? (
                     // eslint-disable-next-line @next/next/no-img-element -- covers/posters are pasted from arbitrary external sites, so next/image's fixed domain allowlist doesn't fit here.
                     <img
@@ -149,19 +149,19 @@ export default async function Home({
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
-                <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+                <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-50">
                   {adaptation.title}
                 </h2>
-                <p className="mt-0.5 text-sm text-zinc-500 dark:text-zinc-400">
+                <p className="mt-0.5 text-sm text-stone-500 dark:text-stone-400">
                   {adaptation.author}
                   {adaptation.book_publish_year
                     ? ` (${adaptation.book_publish_year})`
                     : ""}
                 </p>
 
-                <div className="mt-3 text-sm text-zinc-700 dark:text-zinc-300">
+                <div className="mt-3 text-sm text-stone-700 dark:text-stone-300">
                   <p>
-                    <span className="text-zinc-400 dark:text-zinc-500">
+                    <span className="text-stone-400 dark:text-stone-500">
                       Movie:{" "}
                     </span>
                     {adaptation.movie_title}
@@ -171,7 +171,7 @@ export default async function Home({
                   </p>
                   {adaptation.director && (
                     <p>
-                      <span className="text-zinc-400 dark:text-zinc-500">
+                      <span className="text-stone-400 dark:text-stone-500">
                         Director:{" "}
                       </span>
                       {adaptation.director}
@@ -184,7 +184,7 @@ export default async function Home({
                     {adaptation.genres.map((g) => (
                       <span
                         key={g}
-                        className="rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
+                        className="rounded-full bg-stone-100 px-2.5 py-0.5 text-xs font-medium text-stone-700 dark:bg-stone-800 dark:text-stone-300"
                       >
                         {g}
                       </span>
@@ -192,7 +192,7 @@ export default async function Home({
                   </div>
                 )}
 
-                <p className="mt-4 text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                <p className="mt-4 text-xs font-medium text-stone-500 dark:text-stone-400">
                   {differenceCounts.get(adaptation.id) ?? 0} difference
                   {differenceCounts.get(adaptation.id) === 1 ? "" : "s"} logged
                 </p>

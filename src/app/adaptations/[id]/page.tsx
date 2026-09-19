@@ -59,11 +59,11 @@ export default async function AdaptationDetailPage({
   }
 
   return (
-    <div className="min-h-full bg-amber-50 dark:bg-indigo-950">
+    <div className="min-h-full bg-amber-50 dark:bg-stone-950">
       <div className="mx-auto max-w-3xl px-6 py-12">
         <Link
           href="/"
-          className="text-sm font-medium text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200"
+          className="text-sm font-medium text-stone-500 hover:text-stone-800 dark:text-stone-400 dark:hover:text-stone-200"
         >
           ← Back to all adaptations
         </Link>
@@ -99,26 +99,26 @@ export default async function AdaptationDetailPage({
 
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-start justify-between gap-2">
-              <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+              <h1 className="text-3xl font-bold tracking-tight text-stone-900 dark:text-stone-50">
                 {adaptation.title}
               </h1>
               {isAdmin && (
                 <Link
                   href={`/admin/adaptations/${adaptation.id}/edit`}
-                  className="text-sm font-medium text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
+                  className="text-sm font-medium text-amber-800 hover:text-amber-900 dark:text-amber-500 dark:hover:text-amber-400"
                 >
                   Edit adaptation
                 </Link>
               )}
             </div>
-            <p className="mt-1 text-zinc-600 dark:text-zinc-400">
+            <p className="mt-1 text-stone-600 dark:text-stone-400">
               {adaptation.author}
               {adaptation.book_publish_year
                 ? ` · ${adaptation.book_publish_year}`
                 : ""}
             </p>
-            <p className="mt-3 text-zinc-700 dark:text-zinc-300">
-              <span className="text-zinc-400 dark:text-zinc-500">
+            <p className="mt-3 text-stone-700 dark:text-stone-300">
+              <span className="text-stone-400 dark:text-stone-500">
                 Movie:{" "}
               </span>
               {adaptation.movie_title}
@@ -132,7 +132,7 @@ export default async function AdaptationDetailPage({
                 {adaptation.genres.map((g) => (
                   <span
                     key={g}
-                    className="rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
+                    className="rounded-full bg-stone-100 px-2.5 py-0.5 text-xs font-medium text-stone-700 dark:bg-stone-800 dark:text-stone-300"
                   >
                     {g}
                   </span>
@@ -141,7 +141,7 @@ export default async function AdaptationDetailPage({
             )}
 
             {adaptation.synopsis && (
-              <p className="mt-6 text-lg leading-relaxed text-zinc-600 dark:text-zinc-400">
+              <p className="mt-6 text-lg leading-relaxed text-stone-600 dark:text-stone-400">
                 {adaptation.synopsis}
               </p>
             )}
@@ -149,7 +149,7 @@ export default async function AdaptationDetailPage({
         </header>
 
         {grouped.size === 0 ? (
-          <p className="text-zinc-600 dark:text-zinc-400">
+          <p className="text-stone-600 dark:text-stone-400">
             No differences have been logged for this adaptation yet.
           </p>
         ) : (
@@ -158,7 +158,7 @@ export default async function AdaptationDetailPage({
               grouped.has(category)
             ).map((category) => (
               <section key={category}>
-                <h2 className="mb-3 border-b border-amber-200 pb-2 text-xl font-semibold text-zinc-900 dark:border-indigo-800 dark:text-zinc-50">
+                <h2 className="mb-3 border-b border-amber-200 pb-2 text-xl font-semibold text-stone-900 dark:border-stone-800 dark:text-stone-50">
                   {category}
                 </h2>
                 <div className="space-y-4">
@@ -173,7 +173,7 @@ export default async function AdaptationDetailPage({
 
         <Link
           href={`/submit?adaptation=${adaptation.id}`}
-          className="mt-10 inline-block rounded-lg bg-indigo-600 px-5 py-2.5 font-medium text-white transition-colors hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-400"
+          className="mt-10 inline-block rounded-lg bg-amber-800 px-5 py-2.5 font-medium text-white transition-colors hover:bg-amber-900 dark:bg-amber-600 dark:hover:bg-amber-500"
         >
           + Submit a difference for this adaptation
         </Link>

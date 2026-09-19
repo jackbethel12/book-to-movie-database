@@ -18,10 +18,10 @@ type DefaultValues = {
 };
 
 const inputClasses =
-  "mt-1 w-full rounded-lg border border-amber-300 bg-white px-3 py-2 text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none dark:border-indigo-700 dark:bg-indigo-950 dark:text-zinc-50";
+  "mt-1 w-full rounded-lg border border-amber-300 bg-white px-3 py-2 text-stone-900 shadow-sm focus:border-amber-700 focus:outline-none dark:focus:border-amber-500 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-50";
 
 const labelClasses =
-  "block text-sm font-medium text-zinc-700 dark:text-zinc-300";
+  "block text-sm font-medium text-stone-700 dark:text-stone-300";
 
 // Shared by both the "add adaptation" and "edit adaptation" pages, so the
 // two forms can't drift out of sync with each other.
@@ -132,7 +132,7 @@ export function AdaptationForm({
 
       <div>
         <label htmlFor="genres" className={labelClasses}>
-          Genres <span className="text-zinc-400">(comma-separated)</span>
+          Genres <span className="text-stone-400">(comma-separated)</span>
         </label>
         <input
           id="genres"
@@ -146,7 +146,7 @@ export function AdaptationForm({
 
       <div>
         <label htmlFor="synopsis" className={labelClasses}>
-          Synopsis <span className="text-zinc-400">(optional)</span>
+          Synopsis <span className="text-stone-400">(optional)</span>
         </label>
         <textarea
           id="synopsis"
@@ -162,7 +162,7 @@ export function AdaptationForm({
         <div>
           <label htmlFor="book_cover_url" className={labelClasses}>
             Book cover image URL{" "}
-            <span className="text-zinc-400">(optional)</span>
+            <span className="text-stone-400">(optional)</span>
           </label>
           <input
             id="book_cover_url"
@@ -176,7 +176,7 @@ export function AdaptationForm({
         <div>
           <label htmlFor="movie_poster_url" className={labelClasses}>
             Movie poster image URL{" "}
-            <span className="text-zinc-400">(optional)</span>
+            <span className="text-stone-400">(optional)</span>
           </label>
           <input
             id="movie_poster_url"
@@ -188,7 +188,7 @@ export function AdaptationForm({
           />
         </div>
       </div>
-      <p className="-mt-3 text-xs text-zinc-500 dark:text-zinc-400">
+      <p className="-mt-3 text-xs text-stone-500 dark:text-stone-400">
         Paste a link to an image already hosted somewhere (Wikipedia, an
         official press kit, etc.) — there&apos;s no file upload yet, just a
         web address.
@@ -203,7 +203,7 @@ export function AdaptationForm({
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-lg bg-indigo-600 px-5 py-2.5 font-medium text-white transition-colors hover:bg-indigo-700 disabled:opacity-50 dark:bg-indigo-500 dark:hover:bg-indigo-400"
+        className="w-full rounded-lg bg-amber-800 px-5 py-2.5 font-medium text-white transition-colors hover:bg-amber-900 disabled:opacity-50 dark:bg-amber-600 dark:hover:bg-amber-500"
       >
         {pending ? pendingLabel : submitLabel}
       </button>

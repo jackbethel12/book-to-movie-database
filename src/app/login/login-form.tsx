@@ -25,7 +25,7 @@ export function LoginForm() {
       <div>
         <label
           htmlFor="email"
-          className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+          className="block text-sm font-medium text-stone-700 dark:text-stone-300"
         >
           Email address
         </label>
@@ -35,7 +35,7 @@ export function LoginForm() {
           type="email"
           required
           placeholder="you@example.com"
-          className="mt-1 w-full rounded-lg border border-amber-300 bg-white px-3 py-2 text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none dark:border-indigo-700 dark:bg-indigo-950 dark:text-zinc-50"
+          className="mt-1 w-full rounded-lg border border-amber-300 bg-white px-3 py-2 text-stone-900 shadow-sm focus:border-amber-700 focus:outline-none dark:focus:border-amber-500 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-50"
         />
       </div>
 
@@ -48,7 +48,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-lg bg-indigo-600 px-5 py-2.5 font-medium text-white transition-colors hover:bg-indigo-700 disabled:opacity-50 dark:bg-indigo-500 dark:hover:bg-indigo-400"
+        className="w-full rounded-lg bg-amber-800 px-5 py-2.5 font-medium text-white transition-colors hover:bg-amber-900 disabled:opacity-50 dark:bg-amber-600 dark:hover:bg-amber-500"
       >
         {pending ? "Sending…" : "Send magic link"}
       </button>

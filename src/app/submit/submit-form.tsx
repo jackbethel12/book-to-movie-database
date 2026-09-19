@@ -13,7 +13,7 @@ type AdaptationOption = {
 const initialState: SubmitState = { error: null };
 
 const inputClasses =
-  "mt-1 w-full rounded-lg border border-amber-300 bg-white px-3 py-2 text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none dark:border-indigo-700 dark:bg-indigo-950 dark:text-zinc-50";
+  "mt-1 w-full rounded-lg border border-amber-300 bg-white px-3 py-2 text-stone-900 shadow-sm focus:border-amber-700 focus:outline-none dark:focus:border-amber-500 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-50";
 
 export function SubmitForm({
   adaptations,
@@ -32,7 +32,7 @@ export function SubmitForm({
       <div>
         <label
           htmlFor="adaptation_id"
-          className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+          className="block text-sm font-medium text-stone-700 dark:text-stone-300"
         >
           Which adaptation is this about?
         </label>
@@ -55,7 +55,7 @@ export function SubmitForm({
             </option>
           ))}
         </select>
-        <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+        <p className="mt-1 text-xs text-stone-500 dark:text-stone-400">
           Don&apos;t see it listed? Requesting a brand-new adaptation is
           coming in a future update — for now, let the site owner know
           directly.
@@ -65,7 +65,7 @@ export function SubmitForm({
       <div>
         <label
           htmlFor="category"
-          className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+          className="block text-sm font-medium text-stone-700 dark:text-stone-300"
         >
           Category
         </label>
@@ -90,9 +90,9 @@ export function SubmitForm({
       <div>
         <label
           htmlFor="summary"
-          className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+          className="block text-sm font-medium text-stone-700 dark:text-stone-300"
         >
-          Summary <span className="text-zinc-400">(1-2 sentences)</span>
+          Summary <span className="text-stone-400">(1-2 sentences)</span>
         </label>
         <input
           id="summary"
@@ -108,9 +108,9 @@ export function SubmitForm({
       <div>
         <label
           htmlFor="detail"
-          className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+          className="block text-sm font-medium text-stone-700 dark:text-stone-300"
         >
-          More detail <span className="text-zinc-400">(optional)</span>
+          More detail <span className="text-stone-400">(optional)</span>
         </label>
         <textarea
           id="detail"
@@ -121,11 +121,11 @@ export function SubmitForm({
         />
       </div>
 
-      <label className="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300">
+      <label className="flex items-center gap-2 text-sm text-stone-700 dark:text-stone-300">
         <input
           type="checkbox"
           name="spoiler_flag"
-          className="h-4 w-4 rounded border-zinc-300"
+          className="h-4 w-4 rounded border-stone-300"
         />
         This reveals a spoiler
       </label>
@@ -139,12 +139,12 @@ export function SubmitForm({
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-lg bg-indigo-600 px-5 py-2.5 font-medium text-white transition-colors hover:bg-indigo-700 disabled:opacity-50 dark:bg-indigo-500 dark:hover:bg-indigo-400"
+        className="w-full rounded-lg bg-amber-800 px-5 py-2.5 font-medium text-white transition-colors hover:bg-amber-900 disabled:opacity-50 dark:bg-amber-600 dark:hover:bg-amber-500"
       >
         {pending ? "Submitting…" : "Submit for review"}
       </button>
 
-      <p className="text-xs text-zinc-500 dark:text-zinc-400">
+      <p className="text-xs text-stone-500 dark:text-stone-400">
         Submissions aren&apos;t shown publicly right away — they go into a
         review queue first.
       </p>

@@ -7,12 +7,12 @@ export default async function LoginPage({
   const hadError = params.error === "auth";
 
   return (
-    <div className="min-h-full bg-amber-50 dark:bg-indigo-950">
+    <div className="min-h-full bg-amber-50 dark:bg-stone-950">
       <div className="mx-auto max-w-sm px-6 py-16">
-        <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+        <h1 className="text-2xl font-bold tracking-tight text-stone-900 dark:text-stone-50">
           Log in
         </h1>
-        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+        <p className="mt-2 text-sm text-stone-600 dark:text-stone-400">
           Enter your email and we&apos;ll send you a link to log in — no
           password needed.
         </p>

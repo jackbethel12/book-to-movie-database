@@ -46,28 +46,28 @@ export default async function AdminPage() {
     .returns<EntryWithAdaptation[]>();
 
   return (
-    <div className="min-h-full bg-amber-50 dark:bg-indigo-950">
+    <div className="min-h-full bg-amber-50 dark:bg-stone-950">
       <div className="mx-auto max-w-3xl px-6 py-12">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50">
+            <h1 className="text-3xl font-bold tracking-tight text-stone-900 dark:text-stone-50">
               Moderation queue
             </h1>
-            <p className="mt-2 text-zinc-600 dark:text-zinc-400">
+            <p className="mt-2 text-stone-600 dark:text-stone-400">
               {pending?.length ?? 0} submission
               {pending?.length === 1 ? "" : "s"} waiting for review.
             </p>
           </div>
           <Link
             href="/admin/adaptations/new"
-            className="shrink-0 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-400"
+            className="shrink-0 rounded-lg bg-amber-800 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-amber-900 dark:bg-amber-600 dark:hover:bg-amber-500"
           >
             + Add adaptation
           </Link>
         </div>
 
         {!pending || pending.length === 0 ? (
-          <p className="mt-8 text-zinc-600 dark:text-zinc-400">
+          <p className="mt-8 text-stone-600 dark:text-stone-400">
             Nothing to review right now.
           </p>
         ) : (
@@ -75,14 +75,14 @@ export default async function AdminPage() {
             {pending.map((entry) => (
               <div
                 key={entry.id}
-                className="rounded-lg border border-amber-200 bg-white p-5 dark:border-indigo-800 dark:bg-indigo-900"
+                className="rounded-lg border border-amber-200 bg-white p-5 dark:border-stone-800 dark:bg-stone-900"
               >
                 <EntryMeta entry={entry} />
-                <p className="mt-2 font-medium text-zinc-900 dark:text-zinc-50">
+                <p className="mt-2 font-medium text-stone-900 dark:text-stone-50">
                   {entry.summary}
                 </p>
                 {entry.detail && (
-                  <p className="mt-1.5 whitespace-pre-line text-sm text-zinc-600 dark:text-zinc-400">
+                  <p className="mt-1.5 whitespace-pre-line text-sm text-stone-600 dark:text-stone-400">
                     {entry.detail}
                   </p>
                 )}
@@ -110,16 +110,16 @@ export default async function AdminPage() {
           </div>
         )}
 
-        <h2 className="mt-14 text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+        <h2 className="mt-14 text-xl font-semibold text-stone-900 dark:text-stone-50">
           Live on the site
         </h2>
-        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+        <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
           Already approved and publicly visible. Delete removes one
           permanently (for cleaning up test entries or mistakes).
         </p>
 
         {!approved || approved.length === 0 ? (
-          <p className="mt-6 text-zinc-600 dark:text-zinc-400">
+          <p className="mt-6 text-stone-600 dark:text-stone-400">
             Nothing approved yet.
           </p>
         ) : (
@@ -127,11 +127,11 @@ export default async function AdminPage() {
             {approved.map((entry) => (
               <div
                 key={entry.id}
-                className="flex items-start justify-between gap-4 rounded-lg border border-amber-200 bg-white p-4 dark:border-indigo-800 dark:bg-indigo-900"
+                className="flex items-start justify-between gap-4 rounded-lg border border-amber-200 bg-white p-4 dark:border-stone-800 dark:bg-stone-900"
               >
                 <div className="min-w-0">
                   <EntryMeta entry={entry} />
-                  <p className="mt-1.5 truncate text-sm text-zinc-700 dark:text-zinc-300">
+                  <p className="mt-1.5 truncate text-sm text-stone-700 dark:text-stone-300">
                     {entry.summary}
                   </p>
                 </div>
@@ -154,8 +154,8 @@ export default async function AdminPage() {
 
 function EntryMeta({ entry }: { entry: EntryWithAdaptation }) {
   return (
-    <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-zinc-500 dark:text-zinc-400">
-      <span className="rounded-full bg-zinc-100 px-2 py-0.5 dark:bg-zinc-800">
+    <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-stone-500 dark:text-stone-400">
+      <span className="rounded-full bg-stone-100 px-2 py-0.5 dark:bg-stone-800">
         {entry.category}
       </span>
       {entry.spoiler_flag && (
