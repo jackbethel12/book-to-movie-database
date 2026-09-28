@@ -12,12 +12,26 @@ export default async function LoginPage({
   const hadError = params.error === "auth";
 
   return (
-    <div className="mx-auto max-w-sm px-6 py-16">
-      <div className="rounded-2xl border border-stone-900/10 bg-elevated p-6 shadow-sm sm:p-10 dark:border-stone-100/10 dark:bg-stone-900">
-        <h1 className="font-serif text-2xl font-semibold tracking-tight text-stone-900 dark:text-stone-50">
+    <div className="relative mx-auto max-w-sm px-6 py-20">
+      <div
+        className="pointer-events-none absolute top-[-2rem] left-1/2 -z-10 h-56 w-56 -translate-x-1/2 rounded-full bg-accent/10 blur-3xl"
+        aria-hidden
+      />
+
+      <div className="animate-fade-up rounded-2xl border border-stone-900/10 bg-elevated p-6 shadow-sm sm:p-10 dark:border-stone-100/10 dark:bg-stone-900">
+        <div className="flex justify-center">
+          <span
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-accent/10 text-lg text-accent"
+            aria-hidden
+          >
+            ✉
+          </span>
+        </div>
+
+        <h1 className="mt-4 text-center font-serif text-2xl font-semibold tracking-tight text-stone-900 dark:text-stone-50">
           Log in
         </h1>
-        <p className="mt-2 text-sm text-stone-600 dark:text-stone-400">
+        <p className="mt-2 text-center text-sm text-stone-600 dark:text-stone-400">
           Enter your email and we&apos;ll send you a link to log in — no
           password needed.
         </p>

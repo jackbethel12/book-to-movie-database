@@ -29,14 +29,22 @@ export function LoginForm() {
         >
           Email address
         </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          placeholder="you@example.com"
-          className="mt-1 w-full rounded-lg border border-stone-300 bg-stone-50 px-3 py-2 text-stone-900 shadow-sm focus:border-accent focus:ring-2 focus:ring-accent/20 focus:outline-none dark:border-stone-700 dark:bg-stone-950 dark:text-stone-50"
-        />
+        <div className="relative mt-1">
+          <span
+            className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-stone-400"
+            aria-hidden
+          >
+            ✉
+          </span>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            placeholder="you@example.com"
+            className="w-full rounded-lg border border-stone-300 bg-stone-50 py-2 pr-3 pl-9 text-stone-900 shadow-sm focus:border-accent focus:ring-2 focus:ring-accent/20 focus:outline-none dark:border-stone-700 dark:bg-stone-950 dark:text-stone-50"
+          />
+        </div>
       </div>
 
       {state.error && (
