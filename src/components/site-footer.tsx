@@ -24,6 +24,10 @@ export function SiteFooter() {
           </Link>
         </nav>
       </div>
+      <p className="border-t border-stone-900/10 px-6 py-3 text-center text-xs text-stone-400 dark:border-stone-100/10 dark:text-stone-500">
+        This product uses the TMDB API but is not endorsed or certified by
+        TMDB.
+      </p>
     </footer>
   );
 }
