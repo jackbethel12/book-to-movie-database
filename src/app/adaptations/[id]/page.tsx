@@ -85,7 +85,7 @@ export default async function AdaptationDetailPage({
   return (
     <div>
       {backdropSrc ? (
-        <div className="relative h-56 w-full overflow-hidden sm:h-72">
+        <div className="relative h-40 w-full overflow-hidden sm:h-52">
           {/* eslint-disable-next-line @next/next/no-img-element -- decorative blurred backdrop from an arbitrary external URL. */}
           <img
             src={backdropSrc}
@@ -93,7 +93,7 @@ export default async function AdaptationDetailPage({
             aria-hidden
             className="h-full w-full scale-110 object-cover opacity-40 blur-2xl"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background to-background/10" />
           <Link
             href="/"
             className="absolute top-4 left-6 rounded-full bg-black/40 px-3 py-1.5 text-sm font-medium text-white backdrop-blur-sm transition-colors hover:bg-black/60"
@@ -103,9 +103,7 @@ export default async function AdaptationDetailPage({
         </div>
       ) : null}
 
-      <div
-        className={`mx-auto max-w-3xl px-6 pb-12 ${backdropSrc ? "-mt-20 sm:-mt-28" : "py-12"}`}
-      >
+      <div className="mx-auto max-w-3xl px-6 py-12">
         <div className="rounded-2xl border border-stone-900/10 bg-elevated p-6 shadow-sm sm:p-10 dark:border-stone-100/10 dark:bg-stone-900">
           {!backdropSrc && (
             <Link
