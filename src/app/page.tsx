@@ -67,9 +67,16 @@ export default async function Home({
   const isFiltered = q.length > 0 || selectedGenres.length > 0;
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-14">
-      <header className="mb-12 text-center">
-        <h1 className="font-serif text-4xl font-semibold tracking-tight text-stone-900 sm:text-5xl dark:text-stone-50">
+    <div className="mx-auto max-w-6xl px-6 py-14">
+      <header className="relative mb-12 text-center">
+        <div
+          className="pointer-events-none absolute top-[-4rem] left-1/2 -z-10 h-56 w-[36rem] -translate-x-1/2 rounded-full bg-accent/10 blur-3xl"
+          aria-hidden
+        />
+        <span className="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
+          Book vs. Movie
+        </span>
+        <h1 className="mt-3 font-serif text-4xl font-semibold tracking-tight text-stone-900 sm:text-5xl dark:text-stone-50">
           What did the movie change?
         </h1>
         <p className="mx-auto mt-3 max-w-xl text-stone-600 dark:text-stone-400">
@@ -77,15 +84,21 @@ export default async function Home({
           and altered ending between books and their film adaptations.
         </p>
         {!isFiltered && (
-          <p className="mt-4 text-sm font-medium text-stone-400 dark:text-stone-500">
-            {adaptations?.length ?? 0} adaptation
-            {adaptations?.length === 1 ? "" : "s"} · {totalDifferences}{" "}
-            difference{totalDifferences === 1 ? "" : "s"} logged
-          </p>
+          <div className="mt-5 flex items-center justify-center gap-3 text-sm font-medium text-stone-500 dark:text-stone-400">
+            <span>
+              {adaptations?.length ?? 0} adaptation
+              {adaptations?.length === 1 ? "" : "s"}
+            </span>
+            <span className="h-1 w-1 rounded-full bg-stone-300 dark:bg-stone-700" />
+            <span>
+              {totalDifferences} difference{totalDifferences === 1 ? "" : "s"}{" "}
+              logged
+            </span>
+          </div>
         )}
         <Link
           href="/submit"
-          className="mt-6 inline-block rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-accent-hover"
+          className="mt-6 inline-block rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-transform hover:-translate-y-0.5 hover:bg-accent-hover"
         >
           + Submit a difference
         </Link>
@@ -152,84 +165,70 @@ export default async function Home({
       )}
 
       {!error && adaptations && adaptations.length > 0 && (
-        <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {adaptations.map((adaptation: Adaptation) => (
-            <li key={adaptation.id}>
-              <Link
-                href={`/adaptations/${adaptation.id}`}
-                className="group flex gap-4 rounded-2xl border border-stone-900/10 bg-elevated p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-accent/30 hover:shadow-md dark:border-stone-100/10 dark:bg-stone-900"
+        <ul className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
+          {adaptations.map((adaptation: Adaptation, i: number) => {
+            const count = differenceCounts.get(adaptation.id) ?? 0;
+            return (
+              <li
+                key={adaptation.id}
+                className="animate-fade-up"
+                style={{ animationDelay: `${Math.min(i, 10) * 45}ms` }}
               >
-                <div className="flex aspect-[2/3] w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-stone-200 to-stone-300 shadow-inner dark:from-stone-800 dark:to-stone-700">
-                  {adaptation.movie_poster_url || adaptation.book_cover_url ? (
-                    // eslint-disable-next-line @next/next/no-img-element -- covers/posters are pasted from arbitrary external sites, so next/image's fixed domain allowlist doesn't fit here.
-                    <img
-                      src={
-                        adaptation.movie_poster_url ??
-                        adaptation.book_cover_url ??
-                        undefined
-                      }
-                      alt=""
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <span className="text-xl opacity-60" aria-hidden>
-                      🎬
-                    </span>
-                  )}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <h2 className="font-serif text-lg leading-snug font-semibold text-stone-900 transition-colors group-hover:text-accent dark:text-stone-50">
-                    {adaptation.title}
-                  </h2>
-                  <p className="mt-0.5 text-sm text-stone-500 dark:text-stone-400">
-                    {adaptation.author}
-                    {adaptation.book_publish_year
-                      ? ` (${adaptation.book_publish_year})`
-                      : ""}
-                  </p>
-
-                  <div className="mt-3 text-sm text-stone-700 dark:text-stone-300">
-                    <p>
-                      <span className="text-stone-400 dark:text-stone-500">
-                        Movie:{" "}
-                      </span>
-                      {adaptation.movie_title}
-                      {adaptation.movie_release_year
-                        ? ` (${adaptation.movie_release_year})`
-                        : ""}
-                    </p>
-                    {adaptation.director && (
-                      <p>
-                        <span className="text-stone-400 dark:text-stone-500">
-                          Director:{" "}
+                <Link
+                  href={`/adaptations/${adaptation.id}`}
+                  className="group block overflow-hidden rounded-2xl border border-stone-900/10 bg-elevated shadow-sm transition-all hover:-translate-y-1 hover:border-accent/30 hover:shadow-xl dark:border-stone-100/10 dark:bg-stone-900"
+                >
+                  <div className="relative aspect-[2/3] w-full overflow-hidden bg-gradient-to-br from-stone-200 to-stone-300 dark:from-stone-800 dark:to-stone-700">
+                    {adaptation.movie_poster_url ||
+                    adaptation.book_cover_url ? (
+                      // eslint-disable-next-line @next/next/no-img-element -- covers/posters are pasted from arbitrary external sites, so next/image's fixed domain allowlist doesn't fit here.
+                      <img
+                        src={
+                          adaptation.movie_poster_url ??
+                          adaptation.book_cover_url ??
+                          undefined
+                        }
+                        alt=""
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center">
+                        <span className="text-3xl opacity-50" aria-hidden>
+                          🎬
                         </span>
-                        {adaptation.director}
-                      </p>
+                      </div>
                     )}
+
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+                    {count > 0 && (
+                      <span className="absolute top-2 right-2 rounded-full bg-black/60 px-2 py-0.5 text-xs font-semibold text-white backdrop-blur-sm">
+                        {count}
+                      </span>
+                    )}
+
+                    <span className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 p-3 text-xs font-medium text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                      {adaptation.director
+                        ? `dir. ${adaptation.director}`
+                        : "View differences →"}
+                    </span>
                   </div>
 
-                  {adaptation.genres.length > 0 && (
-                    <div className="mt-3 flex flex-wrap gap-1.5">
-                      {adaptation.genres.map((g) => (
-                        <span
-                          key={g}
-                          className="rounded-full bg-stone-100 px-2.5 py-0.5 text-xs font-medium text-stone-600 dark:bg-stone-800 dark:text-stone-300"
-                        >
-                          {g}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  <p className="mt-4 text-xs font-medium text-accent/80 dark:text-accent">
-                    {differenceCounts.get(adaptation.id) ?? 0} difference
-                    {differenceCounts.get(adaptation.id) === 1 ? "" : "s"}{" "}
-                    logged
-                  </p>
-                </div>
-              </Link>
-            </li>
-          ))}
+                  <div className="p-3.5">
+                    <h2 className="font-serif text-base leading-snug font-semibold text-stone-900 transition-colors group-hover:text-accent dark:text-stone-50">
+                      {adaptation.title}
+                    </h2>
+                    <p className="mt-0.5 truncate text-xs text-stone-500 dark:text-stone-400">
+                      {adaptation.author}
+                      {adaptation.book_publish_year
+                        ? ` · ${adaptation.book_publish_year}`
+                        : ""}
+                    </p>
+                  </div>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>
