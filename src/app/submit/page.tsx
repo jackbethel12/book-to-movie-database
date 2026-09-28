@@ -21,9 +21,8 @@ export default async function SubmitPage({
     .order("title", { ascending: true });
 
   return (
-    <div className="min-h-full bg-[#C49A75]">
-      <div className="mx-auto max-w-xl px-6 py-12">
-      <div className="rounded-2xl bg-stone-50 p-6 shadow-xl sm:p-10 dark:bg-stone-900">
+    <div className="mx-auto max-w-xl px-6 py-12">
+      <div className="rounded-2xl border border-stone-900/10 bg-elevated p-6 shadow-sm sm:p-10 dark:border-stone-100/10 dark:bg-stone-900">
         <Link
           href="/"
           className="text-sm font-medium text-stone-500 hover:text-stone-800 dark:text-stone-400 dark:hover:text-stone-200"
@@ -32,7 +31,7 @@ export default async function SubmitPage({
         </Link>
 
         <header className="mt-4 mb-8">
-          <h1 className="text-3xl font-bold tracking-tight text-stone-900 dark:text-stone-50">
+          <h1 className="font-serif text-3xl font-semibold tracking-tight text-stone-900 dark:text-stone-50">
             Submit a difference
           </h1>
           <p className="mt-2 text-stone-600 dark:text-stone-400">
@@ -45,7 +44,6 @@ export default async function SubmitPage({
           adaptations={adaptations ?? []}
           defaultAdaptationId={defaultAdaptationId}
         />
-      </div>
       </div>
     </div>
   );

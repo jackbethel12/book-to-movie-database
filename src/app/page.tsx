@@ -62,84 +62,104 @@ export default async function Home({
       (differenceCounts.get(row.adaptation_id) ?? 0) + 1
     );
   }
+  const totalDifferences = entryRows?.length ?? 0;
+
+  const isFiltered = q.length > 0 || selectedGenres.length > 0;
 
   return (
-    <div className="min-h-full bg-[#C49A75]">
-      <div className="mx-auto max-w-5xl px-6 py-12">
-        <header className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight text-stone-900">
-              Book vs. Movie
-            </h1>
-            <p className="mt-2 text-stone-800">
-              A crowdsourced reference for what changed between the book and
-              the movie.
-            </p>
-          </div>
-          <Link
-            href="/submit"
-            className="inline-block shrink-0 rounded-lg bg-amber-800 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-amber-900 dark:bg-amber-600 dark:hover:bg-amber-500"
-          >
-            + Submit a difference
-          </Link>
-        </header>
+    <div className="mx-auto max-w-5xl px-6 py-14">
+      <header className="mb-12 text-center">
+        <h1 className="font-serif text-4xl font-semibold tracking-tight text-stone-900 sm:text-5xl dark:text-stone-50">
+          What did the movie change?
+        </h1>
+        <p className="mx-auto mt-3 max-w-xl text-stone-600 dark:text-stone-400">
+          A crowdsourced reference tracking every plot change, cut character,
+          and altered ending between books and their film adaptations.
+        </p>
+        {!isFiltered && (
+          <p className="mt-4 text-sm font-medium text-stone-400 dark:text-stone-500">
+            {adaptations?.length ?? 0} adaptation
+            {adaptations?.length === 1 ? "" : "s"} · {totalDifferences}{" "}
+            difference{totalDifferences === 1 ? "" : "s"} logged
+          </p>
+        )}
+        <Link
+          href="/submit"
+          className="mt-6 inline-block rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-accent-hover"
+        >
+          + Submit a difference
+        </Link>
+      </header>
 
-        <form method="GET" className="mb-8 space-y-3">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+      <form
+        method="GET"
+        className="mb-10 rounded-2xl border border-stone-900/10 bg-elevated p-4 shadow-sm sm:p-5 dark:border-stone-100/10 dark:bg-stone-900"
+      >
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="relative sm:flex-1">
+            <span
+              className="pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2 text-stone-400"
+              aria-hidden
+            >
+              ⌕
+            </span>
             <input
               type="text"
               name="q"
               defaultValue={q}
               placeholder="Search by title, author, or director…"
-              className="w-full rounded-lg border border-stone-300 bg-stone-50 px-4 py-2 text-stone-900 shadow-sm focus:border-amber-700 focus:outline-none dark:focus:border-amber-500 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-50 sm:flex-1"
+              className="w-full rounded-xl border border-stone-300 bg-stone-50 py-2.5 pr-4 pl-9 text-stone-900 focus:border-accent focus:ring-2 focus:ring-accent/20 focus:outline-none dark:border-stone-700 dark:bg-stone-950 dark:text-stone-50"
             />
-            <button
-              type="submit"
-              className="w-full rounded-lg bg-amber-800 px-5 py-2 font-medium text-white transition-colors hover:bg-amber-900 dark:bg-amber-600 dark:hover:bg-amber-500 sm:w-auto"
-            >
-              Search
-            </button>
           </div>
+          <button
+            type="submit"
+            className="w-full rounded-xl bg-accent px-5 py-2.5 font-medium text-white transition-colors hover:bg-accent-hover sm:w-auto"
+          >
+            Search
+          </button>
+        </div>
 
-          {allGenres.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {allGenres.map((g) => (
-                <label key={g} className="cursor-pointer">
-                  <input
-                    type="checkbox"
-                    name="genre"
-                    value={g}
-                    defaultChecked={selectedGenres.includes(g)}
-                    className="peer sr-only"
-                  />
-                  <span className="inline-block rounded-full border border-stone-300 bg-stone-50 px-3 py-1 text-sm text-stone-700 transition-colors peer-checked:border-amber-800 peer-checked:bg-amber-800 peer-checked:text-white dark:border-stone-700 dark:bg-stone-950 dark:text-stone-300 dark:peer-checked:border-amber-600 dark:peer-checked:bg-amber-600">
-                    {g}
-                  </span>
-                </label>
-              ))}
-            </div>
-          )}
-        </form>
-
-        {error && (
-          <p className="rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200">
-            Something went wrong loading adaptations: {error.message}
-          </p>
+        {allGenres.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {allGenres.map((g) => (
+              <label key={g} className="cursor-pointer">
+                <input
+                  type="checkbox"
+                  name="genre"
+                  value={g}
+                  defaultChecked={selectedGenres.includes(g)}
+                  className="peer sr-only"
+                />
+                <span className="inline-block rounded-full border border-stone-300 px-3 py-1 text-sm text-stone-600 transition-colors peer-checked:border-accent peer-checked:bg-accent peer-checked:text-white dark:border-stone-700 dark:text-stone-300">
+                  {g}
+                </span>
+              </label>
+            ))}
+          </div>
         )}
+      </form>
 
-        {!error && adaptations && adaptations.length === 0 && (
-          <p className="text-stone-800">No adaptations match your search.</p>
-        )}
+      {error && (
+        <p className="rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200">
+          Something went wrong loading adaptations: {error.message}
+        </p>
+      )}
 
-        {!error && adaptations && adaptations.length > 0 && (
-          <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {adaptations.map((adaptation: Adaptation) => (
-              <li key={adaptation.id}>
-                <Link
-                  href={`/adaptations/${adaptation.id}`}
-                  className="flex gap-4 rounded-xl border border-stone-300 bg-stone-50 p-5 shadow-sm transition-colors hover:border-amber-400 hover:shadow-md dark:border-stone-800 dark:bg-stone-900 dark:hover:border-amber-500"
-                >
-                <div className="flex h-24 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-stone-200 dark:bg-stone-800">
+      {!error && adaptations && adaptations.length === 0 && (
+        <p className="text-stone-600 dark:text-stone-400">
+          No adaptations match your search.
+        </p>
+      )}
+
+      {!error && adaptations && adaptations.length > 0 && (
+        <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {adaptations.map((adaptation: Adaptation) => (
+            <li key={adaptation.id}>
+              <Link
+                href={`/adaptations/${adaptation.id}`}
+                className="group flex gap-4 rounded-2xl border border-stone-900/10 bg-elevated p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-accent/30 hover:shadow-md dark:border-stone-100/10 dark:bg-stone-900"
+              >
+                <div className="flex aspect-[2/3] w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-stone-200 to-stone-300 shadow-inner dark:from-stone-800 dark:to-stone-700">
                   {adaptation.movie_poster_url || adaptation.book_cover_url ? (
                     // eslint-disable-next-line @next/next/no-img-element -- covers/posters are pasted from arbitrary external sites, so next/image's fixed domain allowlist doesn't fit here.
                     <img
@@ -152,66 +172,66 @@ export default async function Home({
                       className="h-full w-full object-cover"
                     />
                   ) : (
-                    <span className="text-2xl" aria-hidden>
+                    <span className="text-xl opacity-60" aria-hidden>
                       🎬
                     </span>
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
-                <h2 className="text-lg font-semibold text-stone-900 dark:text-stone-50">
-                  {adaptation.title}
-                </h2>
-                <p className="mt-0.5 text-sm text-stone-500 dark:text-stone-400">
-                  {adaptation.author}
-                  {adaptation.book_publish_year
-                    ? ` (${adaptation.book_publish_year})`
-                    : ""}
-                </p>
-
-                <div className="mt-3 text-sm text-stone-700 dark:text-stone-300">
-                  <p>
-                    <span className="text-stone-400 dark:text-stone-500">
-                      Movie:{" "}
-                    </span>
-                    {adaptation.movie_title}
-                    {adaptation.movie_release_year
-                      ? ` (${adaptation.movie_release_year})`
+                  <h2 className="font-serif text-lg leading-snug font-semibold text-stone-900 transition-colors group-hover:text-accent dark:text-stone-50">
+                    {adaptation.title}
+                  </h2>
+                  <p className="mt-0.5 text-sm text-stone-500 dark:text-stone-400">
+                    {adaptation.author}
+                    {adaptation.book_publish_year
+                      ? ` (${adaptation.book_publish_year})`
                       : ""}
                   </p>
-                  {adaptation.director && (
+
+                  <div className="mt-3 text-sm text-stone-700 dark:text-stone-300">
                     <p>
                       <span className="text-stone-400 dark:text-stone-500">
-                        Director:{" "}
+                        Movie:{" "}
                       </span>
-                      {adaptation.director}
+                      {adaptation.movie_title}
+                      {adaptation.movie_release_year
+                        ? ` (${adaptation.movie_release_year})`
+                        : ""}
                     </p>
-                  )}
-                </div>
-
-                {adaptation.genres.length > 0 && (
-                  <div className="mt-3 flex flex-wrap gap-1.5">
-                    {adaptation.genres.map((g) => (
-                      <span
-                        key={g}
-                        className="rounded-full bg-stone-100 px-2.5 py-0.5 text-xs font-medium text-stone-700 dark:bg-stone-800 dark:text-stone-300"
-                      >
-                        {g}
-                      </span>
-                    ))}
+                    {adaptation.director && (
+                      <p>
+                        <span className="text-stone-400 dark:text-stone-500">
+                          Director:{" "}
+                        </span>
+                        {adaptation.director}
+                      </p>
+                    )}
                   </div>
-                )}
 
-                <p className="mt-4 text-xs font-medium text-stone-500 dark:text-stone-400">
-                  {differenceCounts.get(adaptation.id) ?? 0} difference
-                  {differenceCounts.get(adaptation.id) === 1 ? "" : "s"} logged
-                </p>
+                  {adaptation.genres.length > 0 && (
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                      {adaptation.genres.map((g) => (
+                        <span
+                          key={g}
+                          className="rounded-full bg-stone-100 px-2.5 py-0.5 text-xs font-medium text-stone-600 dark:bg-stone-800 dark:text-stone-300"
+                        >
+                          {g}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  <p className="mt-4 text-xs font-medium text-accent/80 dark:text-accent">
+                    {differenceCounts.get(adaptation.id) ?? 0} difference
+                    {differenceCounts.get(adaptation.id) === 1 ? "" : "s"}{" "}
+                    logged
+                  </p>
                 </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

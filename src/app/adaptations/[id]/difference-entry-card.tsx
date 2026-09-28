@@ -17,7 +17,7 @@ export function DifferenceEntryCard({ entry }: { entry: DifferenceEntry }) {
         <button
           type="button"
           onClick={() => setRevealed(true)}
-          className="rounded-md bg-amber-50 px-3 py-1.5 text-sm font-medium text-amber-800 hover:bg-amber-100 dark:bg-amber-950/40 dark:text-amber-300 dark:hover:bg-amber-950"
+          className="rounded-md bg-accent/10 px-3 py-1.5 text-sm font-medium text-accent hover:bg-accent/15 dark:bg-accent/15 dark:hover:bg-accent/25"
         >
           ⚠️ Spoiler — click to reveal
         </button>

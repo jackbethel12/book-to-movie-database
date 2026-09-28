@@ -12,10 +12,9 @@ export default async function LoginPage({
   const hadError = params.error === "auth";
 
   return (
-    <div className="min-h-full bg-[#C49A75]">
-      <div className="mx-auto max-w-sm px-6 py-16">
-      <div className="rounded-2xl bg-stone-50 p-6 shadow-xl sm:p-10 dark:bg-stone-900">
-        <h1 className="text-2xl font-bold tracking-tight text-stone-900 dark:text-stone-50">
+    <div className="mx-auto max-w-sm px-6 py-16">
+      <div className="rounded-2xl border border-stone-900/10 bg-elevated p-6 shadow-sm sm:p-10 dark:border-stone-100/10 dark:bg-stone-900">
+        <h1 className="font-serif text-2xl font-semibold tracking-tight text-stone-900 dark:text-stone-50">
           Log in
         </h1>
         <p className="mt-2 text-sm text-stone-600 dark:text-stone-400">
@@ -33,7 +32,6 @@ export default async function LoginPage({
         <div className="mt-6">
           <LoginForm />
         </div>
-      </div>
       </div>
     </div>
   );

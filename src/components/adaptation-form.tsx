@@ -18,7 +18,7 @@ type DefaultValues = {
 };
 
 const inputClasses =
-  "mt-1 w-full rounded-lg border border-stone-300 bg-stone-50 px-3 py-2 text-stone-900 shadow-sm focus:border-amber-700 focus:outline-none dark:focus:border-amber-500 dark:border-stone-700 dark:bg-stone-950 dark:text-stone-50";
+  "mt-1 w-full rounded-lg border border-stone-300 bg-stone-50 px-3 py-2 text-stone-900 shadow-sm focus:border-accent focus:ring-2 focus:ring-accent/20 focus:outline-none dark:border-stone-700 dark:bg-stone-950 dark:text-stone-50";
 
 const labelClasses =
   "block text-sm font-medium text-stone-700 dark:text-stone-300";
@@ -203,7 +203,7 @@ export function AdaptationForm({
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-lg bg-amber-800 px-5 py-2.5 font-medium text-white transition-colors hover:bg-amber-900 disabled:opacity-50 dark:bg-amber-600 dark:hover:bg-amber-500"
+        className="w-full rounded-lg bg-accent px-5 py-2.5 font-medium text-white transition-colors hover:bg-accent-hover disabled:opacity-50"
       >
         {pending ? pendingLabel : submitLabel}
       </button>

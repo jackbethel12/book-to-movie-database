@@ -74,9 +74,8 @@ export default async function AdaptationDetailPage({
   }
 
   return (
-    <div className="min-h-full bg-[#C49A75]">
-      <div className="mx-auto max-w-3xl px-6 py-12">
-      <div className="rounded-2xl bg-stone-50 p-6 shadow-xl sm:p-10 dark:bg-stone-900">
+    <div className="mx-auto max-w-3xl px-6 py-12">
+      <div className="rounded-2xl border border-stone-900/10 bg-elevated p-6 shadow-sm sm:p-10 dark:border-stone-100/10 dark:bg-stone-900">
         <Link
           href="/"
           className="text-sm font-medium text-stone-500 hover:text-stone-800 dark:text-stone-400 dark:hover:text-stone-200"
@@ -115,13 +114,13 @@ export default async function AdaptationDetailPage({
 
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-start justify-between gap-2">
-              <h1 className="text-3xl font-bold tracking-tight text-stone-900 dark:text-stone-50">
+              <h1 className="font-serif text-3xl font-semibold tracking-tight text-stone-900 dark:text-stone-50">
                 {adaptation.title}
               </h1>
               {isAdmin && (
                 <Link
                   href={`/admin/adaptations/${adaptation.id}/edit`}
-                  className="text-sm font-medium text-amber-800 hover:text-amber-900 dark:text-amber-500 dark:hover:text-amber-400"
+                  className="text-sm font-medium text-accent hover:text-accent-hover"
                 >
                   Edit adaptation
                 </Link>
@@ -148,7 +147,7 @@ export default async function AdaptationDetailPage({
                 {adaptation.genres.map((g) => (
                   <span
                     key={g}
-                    className="rounded-full bg-stone-100 px-2.5 py-0.5 text-xs font-medium text-stone-700 dark:bg-stone-800 dark:text-stone-300"
+                    className="rounded-full bg-stone-100 px-2.5 py-0.5 text-xs font-medium text-stone-600 dark:bg-stone-800 dark:text-stone-300"
                   >
                     {g}
                   </span>
@@ -174,7 +173,7 @@ export default async function AdaptationDetailPage({
               grouped.has(category)
             ).map((category) => (
               <section key={category}>
-                <h2 className="mb-3 border-b border-stone-300 pb-2 text-xl font-semibold text-stone-900 dark:border-stone-800 dark:text-stone-50">
+                <h2 className="mb-3 border-l-2 border-accent pl-3 text-xl font-semibold text-stone-900 dark:text-stone-50">
                   {category}
                 </h2>
                 <div className="space-y-4">
@@ -189,11 +188,10 @@ export default async function AdaptationDetailPage({
 
         <Link
           href={`/submit?adaptation=${adaptation.id}`}
-          className="mt-10 inline-block rounded-lg bg-amber-800 px-5 py-2.5 font-medium text-white transition-colors hover:bg-amber-900 dark:bg-amber-600 dark:hover:bg-amber-500"
+          className="mt-10 inline-block rounded-full bg-accent px-5 py-2.5 font-medium text-white shadow-sm transition-colors hover:bg-accent-hover"
         >
           + Submit a difference for this adaptation
         </Link>
-      </div>
       </div>
     </div>
   );
