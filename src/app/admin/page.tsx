@@ -116,6 +116,12 @@ export default async function AdminPage() {
                       Reject
                     </button>
                   </form>
+                  <Link
+                    href={`/admin/entries/${entry.id}/edit`}
+                    className="rounded-full border border-stone-300 px-4 py-1.5 text-sm font-medium text-stone-600 transition-colors hover:border-accent/30 hover:bg-accent/10 hover:text-accent dark:border-stone-700 dark:text-stone-300"
+                  >
+                    Edit
+                  </Link>
                 </div>
               </li>
             ))}
@@ -151,14 +157,22 @@ export default async function AdminPage() {
                     {entry.summary}
                   </p>
                 </div>
-                <form action={deleteEntry.bind(null, entry.id)}>
-                  <ConfirmDeleteButton
-                    confirmMessage={`Delete this entry?\n\n"${entry.summary}"\n\nThis can't be undone.`}
-                    className="shrink-0 rounded-full px-3 py-1 text-sm font-medium text-stone-400 transition-colors hover:bg-red-50 hover:text-red-700 dark:text-stone-500 dark:hover:bg-red-950 dark:hover:text-red-400"
+                <div className="flex shrink-0 items-center gap-1">
+                  <Link
+                    href={`/admin/entries/${entry.id}/edit`}
+                    className="rounded-full px-3 py-1 text-sm font-medium text-stone-400 transition-colors hover:bg-accent/10 hover:text-accent dark:text-stone-500"
                   >
-                    Delete
-                  </ConfirmDeleteButton>
-                </form>
+                    Edit
+                  </Link>
+                  <form action={deleteEntry.bind(null, entry.id)}>
+                    <ConfirmDeleteButton
+                      confirmMessage={`Delete this entry?\n\n"${entry.summary}"\n\nThis can't be undone.`}
+                      className="rounded-full px-3 py-1 text-sm font-medium text-stone-400 transition-colors hover:bg-red-50 hover:text-red-700 dark:text-stone-500 dark:hover:bg-red-950 dark:hover:text-red-400"
+                    >
+                      Delete
+                    </ConfirmDeleteButton>
+                  </form>
+                </div>
               </li>
             ))}
           </ul>
