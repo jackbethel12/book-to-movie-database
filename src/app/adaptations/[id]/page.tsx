@@ -84,6 +84,19 @@ export default async function AdaptationDetailPage({
 
   return (
     <div>
+      {/* Book covers come from Open Library, which always 302-redirects to
+          an archive.org URL before the actual image loads — that extra
+          round trip is what makes the cover noticeably slower to appear
+          than the poster if nothing kicks off the fetch early. Preloading
+          both here starts them as soon as the page's HTML arrives, well
+          before the <img> tags further down are even parsed. */}
+      {adaptation.book_cover_url && (
+        <link rel="preload" as="image" href={adaptation.book_cover_url} />
+      )}
+      {adaptation.movie_poster_url && (
+        <link rel="preload" as="image" href={adaptation.movie_poster_url} />
+      )}
+
       {backdropSrc ? (
         <div className="relative h-40 w-full overflow-hidden sm:h-52">
           {/* eslint-disable-next-line @next/next/no-img-element -- decorative blurred backdrop from an arbitrary external URL. */}
@@ -131,6 +144,8 @@ export default async function AdaptationDetailPage({
                   <img
                     src={adaptation.book_cover_url}
                     alt={`${adaptation.title} book cover`}
+                    fetchPriority="high"
+                    loading="eager"
                     className="h-44 w-auto rounded-lg object-cover shadow-lg ring-4 ring-elevated dark:ring-stone-900"
                   />
                 )}
@@ -139,6 +154,8 @@ export default async function AdaptationDetailPage({
                   <img
                     src={adaptation.movie_poster_url}
                     alt={`${adaptation.movie_title} movie poster`}
+                    fetchPriority="high"
+                    loading="eager"
                     className="h-44 w-auto rounded-lg object-cover shadow-lg ring-4 ring-elevated dark:ring-stone-900"
                   />
                 )}
