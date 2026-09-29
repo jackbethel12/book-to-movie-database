@@ -94,7 +94,7 @@ export default async function AdminPage() {
                   {entry.summary}
                 </p>
                 {entry.detail && (
-                  <p className="mt-1.5 line-clamp-4 whitespace-pre-line text-sm text-stone-600 dark:text-stone-400">
+                  <p className="mt-1.5 whitespace-pre-line text-sm text-stone-600 dark:text-stone-400">
                     {entry.detail}
                   </p>
                 )}
