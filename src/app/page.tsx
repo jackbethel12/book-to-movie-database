@@ -1,23 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { Adaptation } from "@/lib/types";
-
-// Builds the URL for toggling one genre on/off while keeping the current
-// search term and any other selected genres intact, so each pill is a
-// plain link that applies instantly on click — no separate "Search" step,
-// and clicking an already-selected genre removes it again.
-function genreHref(genre: string, q: string, selectedGenres: string[]) {
-  const nextGenres = selectedGenres.includes(genre)
-    ? selectedGenres.filter((g) => g !== genre)
-    : [...selectedGenres, genre];
-
-  const params = new URLSearchParams();
-  if (q) params.set("q", q);
-  for (const g of nextGenres) params.append("genre", g);
-
-  const qs = params.toString();
-  return qs ? `/?${qs}` : "/";
-}
+import { AdaptationFilters } from "@/components/adaptation-filters";
 
 // This is the homepage: a searchable, filterable list of every adaptation
 // in the database. It's a Server Component, meaning the search happens on
@@ -121,138 +105,87 @@ export default async function Home({
         </Link>
       </header>
 
-      <div className="mb-10 rounded-2xl border border-stone-900/10 bg-elevated p-4 shadow-sm sm:p-5 dark:border-stone-100/10 dark:bg-stone-900">
-        <form
-          method="GET"
-          className="flex flex-col gap-3 sm:flex-row sm:items-center"
-        >
-          {selectedGenres.map((g) => (
-            <input key={g} type="hidden" name="genre" value={g} />
-          ))}
-          <div className="relative sm:flex-1">
-            <span
-              className="pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2 text-stone-400"
-              aria-hidden
-            >
-              ⌕
-            </span>
-            <input
-              type="text"
-              name="q"
-              defaultValue={q}
-              placeholder="Search by title, author, or director…"
-              className="w-full rounded-xl border border-stone-300 bg-stone-50 py-2.5 pr-4 pl-9 text-stone-900 focus:border-accent focus:ring-2 focus:ring-accent/20 focus:outline-none dark:border-stone-700 dark:bg-stone-950 dark:text-stone-50"
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full rounded-xl bg-accent px-5 py-2.5 font-medium text-white transition-colors hover:bg-accent-hover sm:w-auto"
-          >
-            Search
-          </button>
-        </form>
+      <AdaptationFilters allGenres={allGenres} selectedGenres={selectedGenres} q={q}>
+        {error && (
+          <p className="rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200">
+            Something went wrong loading adaptations: {error.message}
+          </p>
+        )}
 
-        {allGenres.length > 0 && (
-          <div className="mt-3 flex flex-wrap gap-2">
-            {allGenres.map((g) => {
-              const active = selectedGenres.includes(g);
+        {!error && adaptations && adaptations.length === 0 && (
+          <p className="text-stone-600 dark:text-stone-400">
+            No adaptations match your search.
+          </p>
+        )}
+
+        {!error && adaptations && adaptations.length > 0 && (
+          <ul className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
+            {adaptations.map((adaptation: Adaptation, i: number) => {
+              const count = differenceCounts.get(adaptation.id) ?? 0;
               return (
-                <Link
-                  key={g}
-                  href={genreHref(g, q, selectedGenres)}
-                  className={`inline-block rounded-full border px-3 py-1 text-sm transition-colors ${
-                    active
-                      ? "border-accent bg-accent text-white"
-                      : "border-stone-300 text-stone-600 hover:border-accent/40 dark:border-stone-700 dark:text-stone-300"
-                  }`}
+                <li
+                  key={adaptation.id}
+                  className="animate-fade-up"
+                  style={{ animationDelay: `${Math.min(i, 10) * 45}ms` }}
                 >
-                  {g}
-                </Link>
+                  <Link
+                    href={`/adaptations/${adaptation.id}`}
+                    className="group block overflow-hidden rounded-2xl border border-stone-900/10 bg-elevated shadow-sm transition-all hover:-translate-y-1 hover:border-accent/30 hover:shadow-xl dark:border-stone-100/10 dark:bg-stone-900"
+                  >
+                    <div className="relative aspect-[2/3] w-full overflow-hidden bg-gradient-to-br from-stone-200 to-stone-300 dark:from-stone-800 dark:to-stone-700">
+                      {adaptation.movie_poster_url ||
+                      adaptation.book_cover_url ? (
+                        // eslint-disable-next-line @next/next/no-img-element -- covers/posters are pasted from arbitrary external sites, so next/image's fixed domain allowlist doesn't fit here.
+                        <img
+                          src={
+                            adaptation.movie_poster_url ??
+                            adaptation.book_cover_url ??
+                            undefined
+                          }
+                          alt=""
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center">
+                          <span className="text-3xl opacity-50" aria-hidden>
+                            🎬
+                          </span>
+                        </div>
+                      )}
+
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+                      {count > 0 && (
+                        <span className="absolute top-2 right-2 rounded-full bg-black/60 px-2 py-0.5 text-xs font-semibold text-white backdrop-blur-sm">
+                          {count}
+                        </span>
+                      )}
+
+                      <span className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 p-3 text-xs font-medium text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                        {adaptation.director
+                          ? `dir. ${adaptation.director}`
+                          : "View differences →"}
+                      </span>
+                    </div>
+
+                    <div className="p-3.5">
+                      <h2 className="font-serif text-base leading-snug font-semibold text-stone-900 transition-colors group-hover:text-accent dark:text-stone-50">
+                        {adaptation.title}
+                      </h2>
+                      <p className="mt-0.5 truncate text-xs text-stone-500 dark:text-stone-400">
+                        {adaptation.author}
+                        {adaptation.book_publish_year
+                          ? ` · ${adaptation.book_publish_year}`
+                          : ""}
+                      </p>
+                    </div>
+                  </Link>
+                </li>
               );
             })}
-          </div>
+          </ul>
         )}
-      </div>
-
-      {error && (
-        <p className="rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200">
-          Something went wrong loading adaptations: {error.message}
-        </p>
-      )}
-
-      {!error && adaptations && adaptations.length === 0 && (
-        <p className="text-stone-600 dark:text-stone-400">
-          No adaptations match your search.
-        </p>
-      )}
-
-      {!error && adaptations && adaptations.length > 0 && (
-        <ul className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
-          {adaptations.map((adaptation: Adaptation, i: number) => {
-            const count = differenceCounts.get(adaptation.id) ?? 0;
-            return (
-              <li
-                key={adaptation.id}
-                className="animate-fade-up"
-                style={{ animationDelay: `${Math.min(i, 10) * 45}ms` }}
-              >
-                <Link
-                  href={`/adaptations/${adaptation.id}`}
-                  className="group block overflow-hidden rounded-2xl border border-stone-900/10 bg-elevated shadow-sm transition-all hover:-translate-y-1 hover:border-accent/30 hover:shadow-xl dark:border-stone-100/10 dark:bg-stone-900"
-                >
-                  <div className="relative aspect-[2/3] w-full overflow-hidden bg-gradient-to-br from-stone-200 to-stone-300 dark:from-stone-800 dark:to-stone-700">
-                    {adaptation.movie_poster_url ||
-                    adaptation.book_cover_url ? (
-                      // eslint-disable-next-line @next/next/no-img-element -- covers/posters are pasted from arbitrary external sites, so next/image's fixed domain allowlist doesn't fit here.
-                      <img
-                        src={
-                          adaptation.movie_poster_url ??
-                          adaptation.book_cover_url ??
-                          undefined
-                        }
-                        alt=""
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center">
-                        <span className="text-3xl opacity-50" aria-hidden>
-                          🎬
-                        </span>
-                      </div>
-                    )}
-
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-
-                    {count > 0 && (
-                      <span className="absolute top-2 right-2 rounded-full bg-black/60 px-2 py-0.5 text-xs font-semibold text-white backdrop-blur-sm">
-                        {count}
-                      </span>
-                    )}
-
-                    <span className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-2 p-3 text-xs font-medium text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                      {adaptation.director
-                        ? `dir. ${adaptation.director}`
-                        : "View differences →"}
-                    </span>
-                  </div>
-
-                  <div className="p-3.5">
-                    <h2 className="font-serif text-base leading-snug font-semibold text-stone-900 transition-colors group-hover:text-accent dark:text-stone-50">
-                      {adaptation.title}
-                    </h2>
-                    <p className="mt-0.5 truncate text-xs text-stone-500 dark:text-stone-400">
-                      {adaptation.author}
-                      {adaptation.book_publish_year
-                        ? ` · ${adaptation.book_publish_year}`
-                        : ""}
-                    </p>
-                  </div>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      )}
+      </AdaptationFilters>
     </div>
   );
 }
