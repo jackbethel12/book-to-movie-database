@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import type { DifferenceEntry } from "@/lib/types";
-import { approveEntry, rejectEntry, deleteEntry } from "./actions";
+import type { AdaptationRequest, DifferenceEntry } from "@/lib/types";
+import { approveEntry, rejectEntry, deleteEntry, dismissRequest } from "./actions";
 import { ConfirmDeleteButton } from "./confirm-delete-button";
 
 export const metadata: Metadata = {
@@ -50,6 +50,12 @@ export default async function AdminPage() {
     .order("created_at", { ascending: false })
     .returns<EntryWithAdaptation[]>();
 
+  const { data: requests } = await supabase
+    .from("adaptation_requests")
+    .select("*")
+    .order("created_at", { ascending: true })
+    .returns<AdaptationRequest[]>();
+
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
       <div className="flex flex-wrap items-start justify-between gap-4">
@@ -68,6 +74,71 @@ export default async function AdminPage() {
           + Add adaptation
         </Link>
       </div>
+
+      <section className="mt-8 rounded-2xl border border-stone-900/10 bg-elevated shadow-sm dark:border-stone-100/10 dark:bg-stone-900">
+        <div className="flex items-center justify-between gap-3 border-b border-stone-900/10 px-6 py-4 dark:border-stone-100/10">
+          <h2 className="font-serif text-lg font-semibold text-stone-900 dark:text-stone-50">
+            Adaptation requests
+          </h2>
+          {requests && requests.length > 0 && (
+            <span className="rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-semibold text-accent">
+              {requests.length}
+            </span>
+          )}
+        </div>
+
+        {!requests || requests.length === 0 ? (
+          <p className="px-6 py-8 text-sm text-stone-500 dark:text-stone-400">
+            No pending requests.
+          </p>
+        ) : (
+          <ul className="divide-y divide-stone-900/10 dark:divide-stone-100/10">
+            {requests.map((request) => (
+              <li key={request.id} className="px-6 py-5">
+                <p className="font-medium text-stone-900 dark:text-stone-50">
+                  {request.title}
+                  {request.author && (
+                    <span className="font-normal text-stone-500 dark:text-stone-400">
+                      {" "}
+                      · {request.author}
+                    </span>
+                  )}
+                </p>
+                <p className="mt-0.5 text-sm text-stone-600 dark:text-stone-400">
+                  Movie: {request.movie_title} ({request.movie_release_year})
+                </p>
+                {request.notes && (
+                  <p className="mt-1.5 whitespace-pre-line text-sm text-stone-600 dark:text-stone-400">
+                    {request.notes}
+                  </p>
+                )}
+
+                <div className="mt-4 flex gap-2.5">
+                  <Link
+                    href={`/admin/adaptations/new?${new URLSearchParams({
+                      title: request.title,
+                      ...(request.author ? { author: request.author } : {}),
+                      movie_title: request.movie_title,
+                      movie_release_year: String(request.movie_release_year),
+                    }).toString()}`}
+                    className="rounded-full bg-accent px-4 py-1.5 text-sm font-medium text-white transition-colors hover:bg-accent-hover"
+                  >
+                    + Add adaptation
+                  </Link>
+                  <form action={dismissRequest.bind(null, request.id)}>
+                    <button
+                      type="submit"
+                      className="rounded-full border border-stone-300 px-4 py-1.5 text-sm font-medium text-stone-600 transition-colors hover:border-red-300 hover:bg-red-50 hover:text-red-700 dark:border-stone-700 dark:text-stone-300 dark:hover:border-red-900 dark:hover:bg-red-950 dark:hover:text-red-400"
+                    >
+                      Dismiss
+                    </button>
+                  </form>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
       <section className="mt-8 rounded-2xl border border-stone-900/10 bg-elevated shadow-sm dark:border-stone-100/10 dark:bg-stone-900">
         <div className="flex items-center justify-between gap-3 border-b border-stone-900/10 px-6 py-4 dark:border-stone-100/10">

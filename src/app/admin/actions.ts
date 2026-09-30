@@ -27,3 +27,9 @@ export async function deleteEntry(entryId: string) {
   revalidatePath("/admin");
   revalidatePath("/", "layout");
 }
+
+export async function dismissRequest(requestId: string) {
+  const supabase = await requireAdmin();
+  await supabase.from("adaptation_requests").delete().eq("id", requestId);
+  revalidatePath("/admin");
+}

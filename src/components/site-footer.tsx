@@ -22,6 +22,12 @@ export function SiteFooter() {
           >
             Submit a difference
           </Link>
+          <Link
+            href="/request"
+            className="transition-colors hover:text-stone-800 dark:hover:text-stone-200"
+          >
+            Request an adaptation
+          </Link>
         </nav>
       </div>
       <p className="border-t border-stone-900/10 px-6 py-3 text-center text-xs text-stone-400 dark:border-stone-100/10 dark:text-stone-500">

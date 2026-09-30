@@ -8,7 +8,10 @@ export const metadata: Metadata = {
   title: "Add an adaptation",
 };
 
-export default async function NewAdaptationPage() {
+export default async function NewAdaptationPage({
+  searchParams,
+}: PageProps<"/admin/adaptations/new">) {
+  const params = await searchParams;
   const supabase = await createClient();
   const {
     data: { user },
@@ -59,7 +62,21 @@ export default async function NewAdaptationPage() {
         className="animate-fade-up rounded-2xl border border-stone-900/10 bg-elevated p-6 shadow-sm sm:p-8 dark:border-stone-100/10 dark:bg-stone-900"
         style={{ animationDelay: "120ms" }}
       >
-        <NewAdaptationForm />
+        <NewAdaptationForm
+          defaultValues={{
+            title: typeof params.title === "string" ? params.title : undefined,
+            author: typeof params.author === "string" ? params.author : undefined,
+            movie_title:
+              typeof params.movie_title === "string"
+                ? params.movie_title
+                : undefined,
+            movie_release_year:
+              typeof params.movie_release_year === "string" &&
+              params.movie_release_year
+                ? Number(params.movie_release_year)
+                : undefined,
+          }}
+        />
       </div>
     </div>
   );

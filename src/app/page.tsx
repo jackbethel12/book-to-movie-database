@@ -97,12 +97,20 @@ export default async function Home({
             </span>
           </div>
         )}
-        <Link
-          href="/submit"
-          className="mt-6 inline-block rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-transform hover:-translate-y-0.5 hover:bg-accent-hover"
-        >
-          + Submit a difference
-        </Link>
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+          <Link
+            href="/submit"
+            className="inline-block rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-transform hover:-translate-y-0.5 hover:bg-accent-hover"
+          >
+            + Submit a difference
+          </Link>
+          <Link
+            href="/request"
+            className="inline-block rounded-full border border-stone-300 px-5 py-2.5 text-sm font-medium text-stone-600 transition-colors hover:border-accent/40 hover:text-accent dark:border-stone-700 dark:text-stone-300"
+          >
+            Don&apos;t see a movie? Request it
+          </Link>
+        </div>
       </header>
 
       <AdaptationFilters allGenres={allGenres} selectedGenres={selectedGenres} q={q}>

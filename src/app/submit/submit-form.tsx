@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import Link from "next/link";
 import { DIFFERENCE_CATEGORIES } from "@/lib/types";
 import { submitDifference, type SubmitState } from "./actions";
 
@@ -57,9 +58,11 @@ export function SubmitForm({
           ))}
         </select>
         <p className="mt-1 text-xs text-stone-500 dark:text-stone-400">
-          Don&apos;t see it listed? Requesting a brand-new adaptation is
-          coming in a future update — for now, let the site owner know
-          directly.
+          Don&apos;t see it listed?{" "}
+          <Link href="/request" className="text-accent hover:text-accent-hover">
+            Request it be added
+          </Link>
+          .
         </p>
       </div>
 

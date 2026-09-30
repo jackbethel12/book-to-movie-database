@@ -47,3 +47,14 @@ export type DifferenceEntry = {
   status: DifferenceStatus;
   created_at: string;
 };
+
+export type AdaptationRequest = {
+  id: string;
+  title: string;
+  author: string | null;
+  movie_title: string;
+  movie_release_year: number;
+  notes: string | null;
+  submitted_by: string | null;
+  created_at: string;
+};
