@@ -2,6 +2,23 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { Adaptation } from "@/lib/types";
 
+// Builds the URL for toggling one genre on/off while keeping the current
+// search term and any other selected genres intact, so each pill is a
+// plain link that applies instantly on click — no separate "Search" step,
+// and clicking an already-selected genre removes it again.
+function genreHref(genre: string, q: string, selectedGenres: string[]) {
+  const nextGenres = selectedGenres.includes(genre)
+    ? selectedGenres.filter((g) => g !== genre)
+    : [...selectedGenres, genre];
+
+  const params = new URLSearchParams();
+  if (q) params.set("q", q);
+  for (const g of nextGenres) params.append("genre", g);
+
+  const qs = params.toString();
+  return qs ? `/?${qs}` : "/";
+}
+
 // This is the homepage: a searchable, filterable list of every adaptation
 // in the database. It's a Server Component, meaning the search happens on
 // the server before the page is sent to the browser — no extra JavaScript
@@ -104,11 +121,14 @@ export default async function Home({
         </Link>
       </header>
 
-      <form
-        method="GET"
-        className="mb-10 rounded-2xl border border-stone-900/10 bg-elevated p-4 shadow-sm sm:p-5 dark:border-stone-100/10 dark:bg-stone-900"
-      >
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+      <div className="mb-10 rounded-2xl border border-stone-900/10 bg-elevated p-4 shadow-sm sm:p-5 dark:border-stone-100/10 dark:bg-stone-900">
+        <form
+          method="GET"
+          className="flex flex-col gap-3 sm:flex-row sm:items-center"
+        >
+          {selectedGenres.map((g) => (
+            <input key={g} type="hidden" name="genre" value={g} />
+          ))}
           <div className="relative sm:flex-1">
             <span
               className="pointer-events-none absolute top-1/2 left-3.5 -translate-y-1/2 text-stone-400"
@@ -130,27 +150,29 @@ export default async function Home({
           >
             Search
           </button>
-        </div>
+        </form>
 
         {allGenres.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-2">
-            {allGenres.map((g) => (
-              <label key={g} className="cursor-pointer">
-                <input
-                  type="checkbox"
-                  name="genre"
-                  value={g}
-                  defaultChecked={selectedGenres.includes(g)}
-                  className="peer sr-only"
-                />
-                <span className="inline-block rounded-full border border-stone-300 px-3 py-1 text-sm text-stone-600 transition-colors peer-checked:border-accent peer-checked:bg-accent peer-checked:text-white dark:border-stone-700 dark:text-stone-300">
+            {allGenres.map((g) => {
+              const active = selectedGenres.includes(g);
+              return (
+                <Link
+                  key={g}
+                  href={genreHref(g, q, selectedGenres)}
+                  className={`inline-block rounded-full border px-3 py-1 text-sm transition-colors ${
+                    active
+                      ? "border-accent bg-accent text-white"
+                      : "border-stone-300 text-stone-600 hover:border-accent/40 dark:border-stone-700 dark:text-stone-300"
+                  }`}
+                >
                   {g}
-                </span>
-              </label>
-            ))}
+                </Link>
+              );
+            })}
           </div>
         )}
-      </form>
+      </div>
 
       {error && (
         <p className="rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200">
