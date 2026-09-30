@@ -106,9 +106,9 @@ export default async function Home({
           </Link>
           <Link
             href="/request"
-            className="inline-block rounded-full border border-stone-300 px-5 py-2.5 text-sm font-medium text-stone-600 transition-colors hover:border-accent/40 hover:text-accent dark:border-stone-700 dark:text-stone-300"
+            className="inline-block rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white shadow-sm transition-transform hover:-translate-y-0.5 hover:bg-accent-hover"
           >
-            Don&apos;t see a movie? Request it
+            Don&apos;t see a movie? Request it here!
           </Link>
         </div>
       </header>
