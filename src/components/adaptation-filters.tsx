@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useTransition, type FormEvent } from "react";
+import { useEffect, useRef, useState, useTransition, type FormEvent } from "react";
 
 // Wraps the search box, genre pills, and the results grid/list passed in as
 // children. Both the text search and genre pills navigate through the
@@ -29,12 +29,43 @@ export function AdaptationFilters({
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const resultsRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
+
+  // The result count can swing wildly between filters (47 cards down to 9,
+  // say), and an opacity fade alone doesn't stop the page height from
+  // instantly collapsing when that happens — everything below just snaps
+  // upward, which is what still reads as "choppy". Locking the container's
+  // height to its pre-click size, then animating it down to the new
+  // content's actual height once it arrives, turns that snap into a smooth
+  // resize instead.
+  const [lockedHeight, setLockedHeight] = useState<number | null>(null);
 
   function navigate(nextQ: string, nextGenres: string[]) {
+    if (resultsRef.current) {
+      setLockedHeight(resultsRef.current.getBoundingClientRect().height);
+    }
     startTransition(() => {
       router.push(buildHref(nextQ, nextGenres));
     });
   }
+
+  useEffect(() => {
+    if (isPending || lockedHeight === null || !innerRef.current) return;
+    // Measured on the unclipped inner element, not the locked outer one —
+    // scrollHeight can never report smaller than an element's own explicit
+    // height, so measuring the locked element itself would just echo the
+    // old locked value back instead of the new content's real height.
+    const target = innerRef.current.getBoundingClientRect().height;
+    const frame = requestAnimationFrame(() => setLockedHeight(target));
+    const release = setTimeout(() => setLockedHeight(null), 350);
+    return () => {
+      cancelAnimationFrame(frame);
+      clearTimeout(release);
+    };
+    // Only re-run when a new navigation settles (isPending flips to false).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isPending]);
 
   function handleSearchSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -103,9 +134,15 @@ export function AdaptationFilters({
       </div>
 
       <div
-        className={`transition-opacity duration-300 ${isPending ? "opacity-40" : "opacity-100"}`}
+        ref={resultsRef}
+        style={
+          lockedHeight !== null
+            ? { height: lockedHeight, overflow: "hidden" }
+            : undefined
+        }
+        className={`transition-[opacity,height] duration-300 ease-out ${isPending ? "opacity-40" : "opacity-100"}`}
       >
-        {children}
+        <div ref={innerRef}>{children}</div>
       </div>
     </div>
   );
