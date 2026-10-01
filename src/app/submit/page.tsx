@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { DIFFERENCE_CATEGORIES } from "@/lib/types";
+import { sortableTitle } from "@/lib/sort-title";
 import { SubmitForm } from "./submit-form";
 
 export const metadata: Metadata = {
@@ -18,8 +19,10 @@ export default async function SubmitPage({
   const supabase = await createClient();
   const { data: adaptations } = await supabase
     .from("adaptations")
-    .select("id, title, movie_title")
-    .order("title", { ascending: true });
+    .select("id, title, movie_title");
+  adaptations?.sort((a, b) =>
+    sortableTitle(a.title).localeCompare(sortableTitle(b.title))
+  );
 
   return (
     <div className="relative mx-auto max-w-4xl px-6 py-14">

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { Adaptation } from "@/lib/types";
+import { sortableTitle } from "@/lib/sort-title";
 import { AdaptationFilters } from "@/components/adaptation-filters";
 
 // This is the homepage: a searchable, filterable list of every adaptation
@@ -23,10 +24,7 @@ export default async function Home({
   // Build the main query. Start with everything, then narrow it down based
   // on whatever the visitor typed into the search box / picked from the
   // genre dropdown.
-  let query = supabase
-    .from("adaptations")
-    .select("*")
-    .order("title", { ascending: true });
+  let query = supabase.from("adaptations").select("*");
 
   if (q) {
     const pattern = `%${q}%`;
@@ -41,6 +39,9 @@ export default async function Home({
   }
 
   const { data: adaptations, error } = await query;
+  adaptations?.sort((a, b) =>
+    sortableTitle(a.title).localeCompare(sortableTitle(b.title))
+  );
 
   // Separately, grab every genre that exists in the database (unfiltered)
   // so the dropdown always shows all the options, not just the ones that
