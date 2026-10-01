@@ -8,10 +8,11 @@ import { useEffect, useRef, useState, useTransition, type FormEvent } from "reac
 // client-side router instead of a full page reload, and the results fade
 // out/in smoothly while the new data streams in — the same soft opacity
 // transition the card hover effect uses, rather than an abrupt page jump.
-function buildHref(q: string, genres: string[]) {
+function buildHref(q: string, genres: string[], decade: number | null) {
   const params = new URLSearchParams();
   if (q) params.set("q", q);
   for (const g of genres) params.append("genre", g);
+  if (decade !== null) params.set("decade", String(decade));
   const qs = params.toString();
   return qs ? `/?${qs}` : "/";
 }
@@ -19,11 +20,15 @@ function buildHref(q: string, genres: string[]) {
 export function AdaptationFilters({
   allGenres,
   selectedGenres,
+  allDecades,
+  selectedDecade,
   q,
   children,
 }: {
   allGenres: string[];
   selectedGenres: string[];
+  allDecades: number[];
+  selectedDecade: number | null;
   q: string;
   children: React.ReactNode;
 }) {
@@ -41,12 +46,12 @@ export function AdaptationFilters({
   // resize instead.
   const [lockedHeight, setLockedHeight] = useState<number | null>(null);
 
-  function navigate(nextQ: string, nextGenres: string[]) {
+  function navigate(nextQ: string, nextGenres: string[], nextDecade: number | null) {
     if (resultsRef.current) {
       setLockedHeight(resultsRef.current.getBoundingClientRect().height);
     }
     startTransition(() => {
-      router.push(buildHref(nextQ, nextGenres));
+      router.push(buildHref(nextQ, nextGenres, nextDecade));
     });
   }
 
@@ -70,14 +75,20 @@ export function AdaptationFilters({
   function handleSearchSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    navigate((formData.get("q") as string) ?? "", selectedGenres);
+    navigate((formData.get("q") as string) ?? "", selectedGenres, selectedDecade);
   }
 
   function toggleGenre(genre: string) {
     const nextGenres = selectedGenres.includes(genre)
       ? selectedGenres.filter((g) => g !== genre)
       : [...selectedGenres, genre];
-    navigate(q, nextGenres);
+    navigate(q, nextGenres, selectedDecade);
+  }
+
+  function toggleDecade(decade: number) {
+    // Decades are mutually exclusive ranges, so picking one replaces
+    // whichever was selected, and clicking the active one clears it.
+    navigate(q, selectedGenres, selectedDecade === decade ? null : decade);
   }
 
   return (
@@ -126,6 +137,31 @@ export function AdaptationFilters({
                   }`}
                 >
                   {g}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {allDecades.length > 0 && (
+          <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-stone-900/10 pt-3 dark:border-stone-100/10">
+            <span className="text-xs font-medium text-stone-400 dark:text-stone-500">
+              Decade:
+            </span>
+            {allDecades.map((d) => {
+              const active = selectedDecade === d;
+              return (
+                <button
+                  key={d}
+                  type="button"
+                  onClick={() => toggleDecade(d)}
+                  className={`inline-block rounded-full border px-3 py-1 text-sm transition-colors ${
+                    active
+                      ? "border-accent bg-accent text-white"
+                      : "border-stone-300 text-stone-600 hover:border-accent/40 dark:border-stone-700 dark:text-stone-300"
+                  }`}
+                >
+                  {d}s
                 </button>
               );
             })}

@@ -18,12 +18,16 @@ export default async function Home({
     : typeof params.genre === "string" && params.genre
       ? [params.genre]
       : [];
+  // A decade is a single value, not a multi-select like genre — "1990" and
+  // "2000" aren't meant to be combined the way two genres are.
+  const decadeParam = typeof params.decade === "string" ? params.decade : "";
+  const selectedDecade = /^\d{4}$/.test(decadeParam) ? Number(decadeParam) : null;
 
   const supabase = await createClient();
 
   // Build the main query. Start with everything, then narrow it down based
-  // on whatever the visitor typed into the search box / picked from the
-  // genre dropdown.
+  // on whatever the visitor typed into the search box, picked from the
+  // genre pills, or picked from the decade pills.
   let query = supabase.from("adaptations").select("*");
 
   if (q) {
@@ -38,18 +42,34 @@ export default async function Home({
     query = query.overlaps("genres", selectedGenres);
   }
 
+  if (selectedDecade !== null) {
+    query = query
+      .gte("movie_release_year", selectedDecade)
+      .lt("movie_release_year", selectedDecade + 10);
+  }
+
   const { data: adaptations, error } = await query;
   adaptations?.sort((a, b) =>
     sortableTitle(a.title).localeCompare(sortableTitle(b.title))
   );
 
-  // Separately, grab every genre that exists in the database (unfiltered)
-  // so the dropdown always shows all the options, not just the ones that
-  // match the current search.
-  const { data: genreRows } = await supabase.from("adaptations").select("genres");
+  // Separately, grab every genre and movie year that exists in the database
+  // (unfiltered) so the pills always show all the options, not just the
+  // ones that match the current search.
+  const { data: genreRows } = await supabase
+    .from("adaptations")
+    .select("genres, movie_release_year");
   const allGenres = Array.from(
     new Set((genreRows ?? []).flatMap((row) => row.genres ?? []))
   ).sort();
+  const allDecades = Array.from(
+    new Set(
+      (genreRows ?? [])
+        .map((row) => row.movie_release_year)
+        .filter((year): year is number => typeof year === "number")
+        .map((year) => Math.floor(year / 10) * 10)
+    )
+  ).sort((a, b) => a - b);
 
   // Count how many approved difference entries each adaptation has, so we
   // can show a "X differences logged" badge on each card.
@@ -66,7 +86,8 @@ export default async function Home({
   }
   const totalDifferences = entryRows?.length ?? 0;
 
-  const isFiltered = q.length > 0 || selectedGenres.length > 0;
+  const isFiltered =
+    q.length > 0 || selectedGenres.length > 0 || selectedDecade !== null;
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-14">
@@ -114,7 +135,13 @@ export default async function Home({
         </div>
       </header>
 
-      <AdaptationFilters allGenres={allGenres} selectedGenres={selectedGenres} q={q}>
+      <AdaptationFilters
+        allGenres={allGenres}
+        selectedGenres={selectedGenres}
+        allDecades={allDecades}
+        selectedDecade={selectedDecade}
+        q={q}
+      >
         {error && (
           <p className="rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200">
             Something went wrong loading adaptations: {error.message}
