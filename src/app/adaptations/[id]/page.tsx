@@ -17,11 +17,38 @@ export async function generateMetadata({
   const supabase = await createClient();
   const { data } = await supabase
     .from("adaptations")
-    .select("title")
+    .select("title, movie_title, synopsis, movie_poster_url, book_cover_url")
     .eq("id", id)
     .single();
 
-  return { title: data?.title ?? "Adaptation not found" };
+  if (!data) {
+    return { title: "Adaptation not found" };
+  }
+
+  const title =
+    data.title === data.movie_title
+      ? `${data.title}: Book vs. Movie`
+      : `${data.title} vs. ${data.movie_title}`;
+  const description =
+    data.synopsis ??
+    `What did the movie change? See the differences between the book "${data.title}" and the film "${data.movie_title}".`;
+  const image = data.movie_poster_url ?? data.book_cover_url ?? undefined;
+
+  return {
+    title: data.title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: image ? [image] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: image ? [image] : undefined,
+    },
+  };
 }
 
 function categorySlug(category: string) {

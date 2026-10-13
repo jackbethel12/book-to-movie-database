@@ -29,6 +29,13 @@ export const metadata: Metadata = {
   },
   description:
     "A crowdsourced reference for what changed between the book and the movie.",
+  openGraph: {
+    siteName: "Book vs. Movie",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
