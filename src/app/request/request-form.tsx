@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { HoneypotField } from "@/components/honeypot-field";
 import { submitAdaptationRequest, type RequestState } from "./actions";
 
 const initialState: RequestState = { error: null, sent: false };
@@ -27,6 +28,8 @@ export function RequestForm() {
 
   return (
     <form action={formAction} className="space-y-5">
+      <HoneypotField />
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="title" className={labelClasses}>

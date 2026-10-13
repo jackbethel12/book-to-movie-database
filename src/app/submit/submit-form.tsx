@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import Link from "next/link";
 import { DIFFERENCE_CATEGORIES } from "@/lib/types";
+import { HoneypotField } from "@/components/honeypot-field";
 import { submitDifference, type SubmitState } from "./actions";
 
 type AdaptationOption = {
@@ -34,6 +35,8 @@ export function SubmitForm({
 
   return (
     <form action={formAction} className="space-y-5">
+      <HoneypotField />
+
       <div>
         <label htmlFor="adaptation_id" className={labelClasses}>
           Which adaptation is this about?

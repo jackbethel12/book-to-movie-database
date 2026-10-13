@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { DIFFERENCE_CATEGORIES, type DifferenceCategory } from "@/lib/types";
+import { isHoneypotFilled } from "@/lib/honeypot";
 
 export type SubmitState = { error: string | null };
 
@@ -18,6 +19,16 @@ export async function submitDifference(
   const summary = formData.get("summary");
   const detail = formData.get("detail");
   const spoilerFlag = formData.get("spoiler_flag") === "on";
+
+  // A bot filled in the honeypot field a real visitor never sees. Redirect
+  // to the same "thanks" page as a real submission instead of erroring, so
+  // there's nothing to learn from the response and adjust around.
+  if (isHoneypotFilled(formData)) {
+    if (typeof adaptationId === "string" && adaptationId) {
+      redirect(`/adaptations/${adaptationId}?submitted=1`);
+    }
+    redirect("/");
+  }
 
   if (typeof adaptationId !== "string" || !adaptationId) {
     return { error: "Please choose which adaptation this is about." };

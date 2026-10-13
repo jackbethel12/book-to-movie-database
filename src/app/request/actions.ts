@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { toNullableInt, toNullableString } from "@/lib/adaptation-form";
+import { isHoneypotFilled } from "@/lib/honeypot";
 
 export type RequestState = { error: string | null; sent: boolean };
 
@@ -9,6 +10,13 @@ export async function submitAdaptationRequest(
   _prevState: RequestState,
   formData: FormData
 ): Promise<RequestState> {
+  // A bot filled in the honeypot field a real visitor never sees. Report
+  // success without actually saving anything, so there's nothing to learn
+  // from the response and adjust around.
+  if (isHoneypotFilled(formData)) {
+    return { error: null, sent: true };
+  }
+
   const title = toNullableString(formData.get("title"));
   const movieTitle = toNullableString(formData.get("movie_title"));
   const movieReleaseYear = toNullableInt(formData.get("movie_release_year"));
