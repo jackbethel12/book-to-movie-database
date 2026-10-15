@@ -343,34 +343,40 @@ export default async function AdaptationDetailPage({
 
         {related.length > 0 && (
           <div className="mt-10">
-            <h2 className="mb-4 text-lg font-semibold text-stone-900 dark:text-stone-50">
+            <h2 className="mb-5 font-serif text-2xl font-semibold text-stone-900 dark:text-stone-50">
               Related Adaptations
             </h2>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
               {related.map((r) => {
                 const img = r.movie_poster_url ?? r.book_cover_url;
                 return (
                   <Link
                     key={r.id}
                     href={`/adaptations/${r.id}`}
-                    className="group flex items-center gap-3 rounded-xl border border-stone-900/10 bg-elevated p-3 shadow-sm transition-all hover:-translate-y-0.5 hover:border-accent/30 hover:shadow-md dark:border-stone-100/10 dark:bg-stone-900"
+                    className="group block overflow-hidden rounded-2xl border border-stone-900/10 bg-elevated shadow-sm transition-all hover:-translate-y-1 hover:border-accent/30 hover:shadow-xl dark:border-stone-100/10 dark:bg-stone-900"
                   >
-                    <div className="h-20 w-14 shrink-0 overflow-hidden rounded-md bg-gradient-to-br from-stone-200 to-stone-300 dark:from-stone-800 dark:to-stone-700">
-                      {img && (
+                    <div className="relative aspect-[2/3] w-full overflow-hidden bg-gradient-to-br from-stone-200 to-stone-300 dark:from-stone-800 dark:to-stone-700">
+                      {img ? (
                         // eslint-disable-next-line @next/next/no-img-element -- covers/posters are pasted from arbitrary external sites, so next/image's fixed domain allowlist doesn't fit here.
                         <img
                           src={img}
                           alt=""
-                          className="h-full w-full object-cover"
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center">
+                          <span className="text-3xl opacity-50" aria-hidden>
+                            🎬
+                          </span>
+                        </div>
                       )}
                     </div>
-                    <div className="min-w-0">
-                      <p className="truncate font-serif text-sm font-semibold text-stone-900 transition-colors group-hover:text-accent dark:text-stone-50">
+                    <div className="p-4">
+                      <p className="font-serif text-lg leading-snug font-semibold text-stone-900 transition-colors group-hover:text-accent dark:text-stone-50">
                         {r.title}
                       </p>
                       {r.movie_release_year && (
-                        <p className="mt-0.5 text-xs text-stone-500 dark:text-stone-400">
+                        <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
                           {r.movie_release_year}
                         </p>
                       )}
