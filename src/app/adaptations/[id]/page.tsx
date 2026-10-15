@@ -107,6 +107,60 @@ export default async function AdaptationDetailPage({
     grouped.has(category)
   );
 
+  // "Related Adaptations" footer: same-author matches come first, since
+  // that's what actually catches a series — all three Hunger Games books,
+  // say, share an author even though nothing in the schema tags them as a
+  // series. Genre overlap only fills in whatever's left for standalone
+  // titles that have no other same-author entries in the database.
+  type RelatedAdaptation = Pick<
+    Adaptation,
+    | "id"
+    | "title"
+    | "movie_title"
+    | "book_cover_url"
+    | "movie_poster_url"
+    | "movie_release_year"
+    | "genres"
+  >;
+  const relatedFields =
+    "id, title, movie_title, book_cover_url, movie_poster_url, movie_release_year, genres";
+
+  let related: RelatedAdaptation[] = [];
+
+  if (adaptation.author) {
+    const { data: sameAuthor } = await supabase
+      .from("adaptations")
+      .select(relatedFields)
+      .eq("author", adaptation.author)
+      .neq("id", adaptation.id)
+      .order("book_publish_year", { ascending: true })
+      .returns<RelatedAdaptation[]>();
+    related = sameAuthor ?? [];
+  }
+
+  if (related.length < 3 && adaptation.genres.length > 0) {
+    const { data: genreMatches } = await supabase
+      .from("adaptations")
+      .select(relatedFields)
+      .overlaps("genres", adaptation.genres)
+      .neq("id", adaptation.id)
+      .returns<RelatedAdaptation[]>();
+
+    const alreadyIncluded = new Set(related.map((r) => r.id));
+    const rankedByOverlap = (genreMatches ?? [])
+      .filter((a) => !alreadyIncluded.has(a.id))
+      .map((a) => ({
+        adaptation: a,
+        overlap: a.genres.filter((g) => adaptation.genres.includes(g)).length,
+      }))
+      .sort((a, b) => b.overlap - a.overlap)
+      .map((x) => x.adaptation);
+
+    related = [...related, ...rankedByOverlap];
+  }
+
+  related = related.slice(0, 3);
+
   const backdropSrc = adaptation.movie_poster_url ?? adaptation.book_cover_url;
 
   return (
@@ -286,6 +340,47 @@ export default async function AdaptationDetailPage({
             + Submit a difference for this adaptation
           </Link>
         </div>
+
+        {related.length > 0 && (
+          <div className="mt-10">
+            <h2 className="mb-4 text-lg font-semibold text-stone-900 dark:text-stone-50">
+              Related Adaptations
+            </h2>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              {related.map((r) => {
+                const img = r.movie_poster_url ?? r.book_cover_url;
+                return (
+                  <Link
+                    key={r.id}
+                    href={`/adaptations/${r.id}`}
+                    className="group flex items-center gap-3 rounded-xl border border-stone-900/10 bg-elevated p-3 shadow-sm transition-all hover:-translate-y-0.5 hover:border-accent/30 hover:shadow-md dark:border-stone-100/10 dark:bg-stone-900"
+                  >
+                    <div className="h-20 w-14 shrink-0 overflow-hidden rounded-md bg-gradient-to-br from-stone-200 to-stone-300 dark:from-stone-800 dark:to-stone-700">
+                      {img && (
+                        // eslint-disable-next-line @next/next/no-img-element -- covers/posters are pasted from arbitrary external sites, so next/image's fixed domain allowlist doesn't fit here.
+                        <img
+                          src={img}
+                          alt=""
+                          className="h-full w-full object-cover"
+                        />
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="truncate font-serif text-sm font-semibold text-stone-900 transition-colors group-hover:text-accent dark:text-stone-50">
+                        {r.title}
+                      </p>
+                      {r.movie_release_year && (
+                        <p className="mt-0.5 text-xs text-stone-500 dark:text-stone-400">
+                          {r.movie_release_year}
+                        </p>
+                      )}
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
